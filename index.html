@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Precep">
 <meta property="og:title" content="Precep — o plantão na palma da mão">
-<meta property="og:description" content="Intubar, prescrever, evoluir e acompanhar. Doses pelo peso, receitas e evoluções prontas para colar. 7 dias grátis.">
+<meta property="og:description" content="Intubar, prescrever, evoluir e acompanhar. Doses pelo peso, receitas e evoluções prontas para colar. 5 dias grátis.">
 <meta property="og:image" content="icon-512.png">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
@@ -148,8 +148,8 @@ tr:last-child td{border-bottom:0}
     <div class="f"><label for="cEmail">E-mail</label><input id="cEmail" type="email" required autocomplete="email"></div>
     <div class="f"><label for="cSenha">Senha (mín. 6)</label><input id="cSenha" type="password" required minlength="6" autocomplete="new-password"></div>
     <label class="aceite"><input type="checkbox" id="cTermos" required> <span>Li e aceito os <button type="button" class="lnk" id="verTermos">Termos de uso e a Política de privacidade</button>.</span></label>
-    <button class="btn" id="bCad">Começar 7 dias grátis</button>
-    <p class="miudo">Depois da semana grátis: <b>R$ 44,90 por 6 meses</b>, por Pix. Sem renovação automática.</p>
+    <button class="btn" id="bCad">Começar 5 dias grátis</button>
+    <p class="miudo">Depois dos 5 dias grátis: <b>R$ 44,90 por 6 meses</b>, por Pix. Sem renovação automática.</p>
     <button type="button" class="btn ghost instalar" data-instalar hidden>📲 Instalar o app no celular</button>
   </form>
   <form id="fEnt" hidden autocomplete="on">
@@ -168,7 +168,7 @@ tr:last-child td{border-bottom:0}
 <!-- pagar -->
 <div id="vPagar" class="tela" hidden>
   <div class="marca">Precep<span>.</span></div>
-  <p class="lema" id="pgTitulo">Seus 7 dias grátis terminaram.</p>
+  <p class="lema" id="pgTitulo">Seus 5 dias grátis terminaram.</p>
   <div class="preco" id="pgPreco">R$ —<small>por 6 meses</small></div>
   <p class="miudo" id="pgSub">Pagamento único por Pix. Liberação automática em segundos.</p>
   <div id="pgInicio" class="linha" style="margin-top:14px">
@@ -391,7 +391,7 @@ async function api(path,opt){
 async function abrirPagar(p,podeVoltar){
   ver('vPagar');
   $('bVoltarApp').hidden=!(podeVoltar&&S.montado);
-  $('pgTitulo').textContent=p.status==='teste'?'Libere agora e não perca o acesso.':p.teste_negado?'Este WhatsApp já usou o teste grátis.':p.status==='expirado'&&p.pago_ate?'Seu acesso terminou. Renove por mais 6 meses.':p.status==='pago'?'Renove antes e some mais 6 meses.':'Seus 7 dias grátis terminaram.';
+  $('pgTitulo').textContent=p.status==='teste'?'Libere agora e não perca o acesso.':p.teste_negado?'Este WhatsApp já usou o teste grátis.':p.status==='expirado'&&p.pago_ate?'Seu acesso terminou. Renove por mais 6 meses.':p.status==='pago'?'Renove antes e some mais 6 meses.':'Seus 5 dias grátis terminaram.';
   try{if(!S.cfg)S.cfg=await api('/config');$('pgPreco').innerHTML=reais(S.cfg.preco)+'<small>por '+S.cfg.meses+' meses</small>';$('bPix').textContent='Gerar Pix de '+reais(S.cfg.preco)}catch(e){}
   var salvo=lsGet('precep_pix');
   if(salvo&&salvo.id&&Date.now()-salvo.t<25*60e3)mostrarPix(salvo);
@@ -428,7 +428,7 @@ async function carregarMetricas(){
   var r=await sb.rpc('precep_admin_metricas');
   if(r.error){msg($('admMsg'),'Erro nas métricas: '+r.error.message,'erro');return}
   var m=r.data;
-  var k=[['Cadastros',m.total,'+'+m.novos_hoje+' hoje · +'+m.novos_7d+' em 7 d'],['Em teste',m.em_teste,'7 dias grátis'],['Pagantes ativos',m.pagantes,m.vencendo_15d+' vencem em 15 d',1],['Conversão',(m.conversao||0).toLocaleString('pt-BR')+'%',m.convertidos+' já pagaram'],
+  var k=[['Cadastros',m.total,'+'+m.novos_hoje+' hoje · +'+m.novos_7d+' em 7 d'],['Em teste',m.em_teste,'5 dias grátis'],['Pagantes ativos',m.pagantes,m.vencendo_15d+' vencem em 15 d',1],['Conversão',(m.conversao||0).toLocaleString('pt-BR')+'%',m.convertidos+' já pagaram'],
          ['Receita no mês',reais(m.receita_mes),'30 d: '+reais(m.receita_30d),1],['Receita total',reais(m.receita_total),m.pix_pendentes+' Pix pendente(s) hoje'],['Cortesias',m.cortesias,'ativas'],['Ativos 7 d',m.ativos_7d,m.expirados+' expirados']];
   $('kpis').innerHTML=k.map(function(x){return '<div class="kpi'+(x[3]?' dest':'')+'"><div class="k">'+x[0]+'</div><div class="v">'+x[1]+'</div><div class="s">'+esc(x[2])+'</div></div>'}).join('');
   grafico(m.serie||[]);
@@ -481,7 +481,7 @@ if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.service
 /* ---------------- termos ---------------- */
 var TERMOS='<h3>Termos de uso</h3>'+
  '<p>O Precep é uma ferramenta de <b>apoio</b> para profissionais e estudantes da saúde. Doses, modelos de receita, textos de evolução e guias são sugestões baseadas em bulas e diretrizes, e <b>não substituem a avaliação, o julgamento e a responsabilidade do médico</b> que atende o paciente. Confira sempre dose, apresentação, alergias, gestação, função renal e interações antes de prescrever. Estudantes devem usar sob supervisão.</p>'+
- '<p>O acesso é pessoal e intransferível. Após a semana grátis, o acesso por 6 meses é liberado mediante pagamento único por Pix, sem renovação automática. Valores pagos não são reembolsados após o uso, salvo o previsto no Código de Defesa do Consumidor.</p>'+
+ '<p>O acesso é pessoal e intransferível. Após os 5 dias grátis, o acesso por 6 meses é liberado mediante pagamento único por Pix, sem renovação automática. Valores pagos não são reembolsados após o uso, salvo o previsto no Código de Defesa do Consumidor.</p>'+
  '<h3>Privacidade (LGPD)</h3>'+
  '<p><b>Seus dados:</b> nome, e-mail, WhatsApp e categoria, usados para criar a conta, liberar o acesso e falar com você. O registro de uso do app é agregado e serve para melhorar o produto.</p>'+
  '<p><b>Dados de pacientes</b> (módulo Pacientes e fotos): você é o responsável por eles. Registre apenas leito e iniciais, nunca nome completo, CPF, prontuário ou rosto. Os dados ficam em servidor com acesso restrito a você e aos colegas das pastas que você compartilhar. Você pode apagar pacientes, fotos e pastas a qualquer momento, e pedir a exclusão da conta pelo contato abaixo.</p>'+
