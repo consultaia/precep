@@ -332,6 +332,27 @@ function faixaTeste(){
 }
 setInterval(function(){if(S.montado&&!$('vApp').hidden)faixaTeste()},60000);
 
+/* Versão nova do conteúdo publicada enquanto o app está aberto: avisa e recarrega com um toque. */
+async function checarVersao(){
+  if(!S.montado||!sb||!navigator.onLine||$('faixaVersao'))return;
+  try{
+    var v=await comTempo(sb.from('precep_app').select('versao').single(),9000);
+    var c=lsGet('precep_cache')||{};
+    if(v.error||!v.data||!c.versao||v.data.versao===c.versao)return;
+    var f=document.createElement('div');f.className='faixa';f.id='faixaVersao';f.style.borderLeftColor='var(--accent)';
+    f.innerHTML='<span><b>Atualização disponível.</b> Toque para carregar a versão nova.</span><button class="btn sm">Atualizar</button>';
+    f.querySelector('button').onclick=async function(){
+      this.disabled=true;this.textContent='Atualizando…';
+      try{var n=await comTempo(sb.from('precep_app').select('versao,html').single(),15000);
+        if(!n.error&&n.data){c.versao=n.data.versao;c.html=n.data.html;lsSet('precep_cache',c)}}catch(e){}
+      location.reload();
+    };
+    var top=$('vApp').querySelector('.top');if(top)top.appendChild(f);
+  }catch(e){}
+}
+document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')checarVersao()});
+setInterval(checarVersao,15*60000);
+
 function abrirConta(){
   var p=S.perfil||{},st={pago:'Acesso pago',cortesia:'Cortesia',teste:'Teste grátis',expirado:'Expirado'}[p.status]||'';
   var d=document.createElement('div');d.className='sheet';
