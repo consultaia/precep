@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Precep — o plantão na palma da mão</title>
+<meta name="description" content="Doses de intubação pelo peso, receitas prontas, evolução em toques e passo a passo para o internato. 5 dias grátis.">
+<meta name="theme-color" content="#0F1619">
+<meta property="og:title" content="Precep — o plantão na palma da mão">
+<meta property="og:description" content="Doses pelo peso, receitas prontas, evolução em toques e passo a passo para o internato. 5 dias grátis.">
+<meta property="og:image" content="https://consultaia.github.io/precep/card.png">
+<meta property="og:url" content="https://consultaia.github.io/precep/conheca.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
+<style>
+:root{
+  --bg:#0F1619; --surface:#172126; --surface2:#1E2A30; --line:#2A3A40;
+  --fg:#E8EEF0; --muted:#93A4AA; --accent:#6FD3D8; --on-accent:#062326;
+  --c-i:#FFD400; --c-p:#36B37E; --c-e:#3FA9F5; --c-a:#B387E6; --c-g:#FF8A3D;
+  --f-body:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-num:"Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
+  --bg:#F3F6F7; --surface:#FFFFFF; --surface2:#EAF0F2; --line:#D3DDE0;
+  --fg:#0F1619; --muted:#55666C; --accent:#0E7C83; --on-accent:#FFFFFF;
+  --c-i:#B8960A; --c-p:#1F8A5B; --c-e:#1F7FC4; --c-a:#7A4FB8; --c-g:#C9601C; color-scheme:light } }
+:root[data-theme="light"]{
+  --bg:#F3F6F7; --surface:#FFFFFF; --surface2:#EAF0F2; --line:#D3DDE0;
+  --fg:#0F1619; --muted:#55666C; --accent:#0E7C83; --on-accent:#FFFFFF;
+  --c-i:#B8960A; --c-p:#1F8A5B; --c-e:#1F7FC4; --c-a:#7A4FB8; --c-g:#C9601C; color-scheme:light }
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:17px;line-height:1.5;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+.w{max-width:960px;margin:0 auto;padding:0 16px}
+header.top{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+.marca{font-family:var(--f-num);font-weight:700;font-size:30px;letter-spacing:-.01em}
+.marca span{color:var(--accent)}
+.lnk{font-size:15px;color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:6px 14px}
+.hero{display:grid;gap:28px;padding:20px 0 36px;align-items:center}
+@media (min-width:820px){.hero{grid-template-columns:1.1fr .9fr;padding:48px 0 56px}}
+h1{font-family:var(--f-num);font-weight:700;font-size:clamp(40px,8vw,64px);line-height:1;margin:0 0 14px;letter-spacing:-.01em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.sub{font-size:19px;color:var(--muted);margin:0 0 22px;max-width:34em}
+.cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:var(--on-accent);font-weight:700;font-size:18px;text-decoration:none;border-radius:12px;padding:15px 24px;min-height:52px}
+.cta:focus-visible,.lnk:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.nota{font-size:14px;color:var(--muted);margin-top:10px}
+/* mockup */
+.fone{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:16px;max-width:360px;width:100%;justify-self:center;box-shadow:0 20px 50px rgba(0,0,0,.25)}
+.fone .pt{display:flex;gap:8px;margin-bottom:12px}
+.fone .pt div{flex:1;background:var(--surface2);border-radius:10px;padding:6px 10px}
+.fone .pt small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fone .pt b{font-family:var(--f-num);font-size:24px}
+.dose{border-radius:12px;background:var(--surface2);padding:10px 12px 10px 18px;position:relative;margin-top:8px}
+.dose::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;border-radius:12px 0 0 12px;background:var(--k)}
+.dose h3{margin:0;font-size:16px}
+.dose .m{font-size:12px;color:var(--muted)}
+.dose .v{font-family:var(--f-num);font-weight:700;font-size:26px}
+.dose .v span{color:var(--accent);margin-left:8px}
+section{padding:36px 0;border-top:1px solid var(--line)}
+h2{font-family:var(--f-num);font-weight:700;font-size:clamp(28px,5vw,40px);line-height:1.05;margin:0 0 18px;text-wrap:balance}
+.grid{display:grid;gap:12px}
+@media (min-width:640px){.grid.g2{grid-template-columns:1fr 1fr}}
+@media (min-width:900px){.grid.g3{grid-template-columns:1fr 1fr 1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 16px 22px;position:relative}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;border-radius:14px 0 0 14px;background:var(--k,var(--accent))}
+.card h3{margin:0 0 4px;font-family:var(--f-num);font-size:24px;font-weight:700}
+.card p{margin:0;color:var(--muted);font-size:16px}
+.quem{display:flex;flex-wrap:wrap;gap:8px}
+.quem span{border:1px solid var(--line);border-radius:999px;padding:8px 14px;background:var(--surface)}
+.preco{display:grid;gap:18px;align-items:center}
+@media (min-width:760px){.preco{grid-template-columns:1fr 1fr}}
+.valor{font-family:var(--f-num);font-weight:700;font-size:64px;line-height:1}
+.valor small{font-size:22px;color:var(--muted);font-weight:600;margin-left:6px}
+ul.ok{list-style:none;padding:0;margin:0}
+ul.ok li{padding:6px 0 6px 28px;position:relative}
+ul.ok li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:700}
+details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 14px;margin-top:8px}
+details summary{font-weight:700;padding:13px 0;cursor:pointer}
+details p{margin:0 0 14px;color:var(--muted)}
+footer{padding:28px 0 40px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+.final{text-align:center}
+</style>
+</head>
+<body>
+<div class="w">
+  <header class="top">
+    <div class="marca">Precep<span>.</span></div>
+    <a class="lnk" href="./" data-cta>Já tenho conta</a>
+  </header>
+
+  <div class="hero">
+    <div>
+      <h1>O plantão na <em>palma da mão</em>.</h1>
+      <p class="sub">Dose de intubação em mg e ml pelo peso, receita pronta para copiar, evolução em toques e o passo a passo que ninguém te explicou no internato. Adulto e pediatria.</p>
+      <a class="cta" href="./" data-cta>Começar 5 dias grátis</a>
+      <p class="nota">Sem cartão. Depois, R$ 44,90 por 6 meses no Pix, sem renovação automática.</p>
+    </div>
+    <div class="fone" aria-label="Exemplo de cálculo no app">
+      <div class="pt"><div><small>Peso</small><b>90 kg</b></div><div><small>Motivo</small><b>Choque</b></div></div>
+      <div class="dose" style="--k:var(--c-i)"><h3>Cetamina</h3><div class="m">0,5–1 mg/kg · 50 mg/ml</div><div class="v">90 mg<span>1,8 ml</span></div></div>
+      <div class="dose" style="--k:#FF4D4D"><h3>Rocurônio</h3><div class="m">1,6 mg/kg no choque · 10 mg/ml</div><div class="v">144 mg<span>14,4 ml</span></div></div>
+      <div class="dose" style="--k:var(--c-e)"><h3>Fentanil contínuo</h3><div class="m">3 mcg/kg/h · 50 mcg/ml</div><div class="v">270 mcg/h<span>5,4 ml/h</span></div></div>
+    </div>
+  </div>
+
+  <section>
+    <h2>Tudo o que o plantão pede, em um toque</h2>
+    <div class="grid g2">
+      <div class="card" style="--k:var(--c-i)"><h3>⚡ Intubar</h3><p>Peso e motivo. Saem indutor, bloqueador, tubo, ventilação inicial e checklist, ajustados para choque, TCE, broncoespasmo e criança.</p></div>
+      <div class="card" style="--k:var(--c-p)"><h3>💊 Prescrever</h3><p>Soluções por classe com dose pelo peso e receitas prontas por condição. Copia direto para o prontuário ou para o Word.</p></div>
+      <div class="card" style="--k:var(--c-e)"><h3>📝 Evoluir</h3><p>PA, reavaliação, alta, UTI por sistemas, passagem de plantão. Toque nos achados e o texto sai pronto.</p></div>
+      <div class="card" style="--k:var(--c-a)"><h3>🛏️ Pacientes</h3><p>Leito, problemas, pendências e exames com tendência. Pasta compartilhada com a equipe por código.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Para quem está começando</h2>
+    <div class="grid g2">
+      <div class="card" style="--k:var(--c-g)"><h3>🎓 Aprender</h3><p>Sequência rápida em 10 passos, qual indutor escolher em cada caso, sedação depois do tubo e como fazer a conta de mg, ml e ml/h sem errar.</p></div>
+      <div class="card" style="--k:var(--c-g)"><h3>💉 Anestésico local</h3><p>Dose máxima de lidocaína, bupivacaína e ropivacaína em mg e em ml para o peso do paciente, e o que fazer na intoxicação.</p></div>
+    </div>
+    <div class="quem" style="margin-top:16px"><span>Internato</span><span>Recém-formado</span><span>Residente</span><span>Plantonista de PS, UPA e UTI</span></div>
+  </section>
+
+  <section>
+    <div class="preco">
+      <div>
+        <h2>Quanto custa</h2>
+        <div class="valor">R$ 44,90<small>por 6 meses</small></div>
+        <p class="nota">Menos de R$ 7,50 por mês. Pix, liberado em segundos.</p>
+      </div>
+      <ul class="ok">
+        <li>5 dias grátis com tudo liberado</li>
+        <li>Sem cartão e sem renovação automática</li>
+        <li>Funciona no celular, instala como app e abre sem internet</li>
+        <li>Adulto e pediatria</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Perguntas</h2>
+    <details><summary>Substitui o meu julgamento clínico?</summary><p>Não. É ferramenta de apoio, com base em bulas e diretrizes. Confira sempre dose, apresentação e alergias, e siga o protocolo do seu serviço.</p></details>
+    <details><summary>Funciona sem internet?</summary><p>Sim. Depois de abrir uma vez com internet, o app fica salvo no celular.</p></details>
+    <details><summary>Preciso pagar para testar?</summary><p>Não. São 5 dias grátis com tudo liberado. Se gostar, paga R$ 44,90 no Pix e ganha 6 meses.</p></details>
+    <details><summary>E os dados dos pacientes?</summary><p>Na lista de pacientes você usa só leito e iniciais. Cada paciente fica visível só para você e para quem estiver na mesma pasta.</p></details>
+  </section>
+
+  <section class="final">
+    <h2>Teste no próximo plantão</h2>
+    <a class="cta" href="./" data-cta>Começar 5 dias grátis</a>
+  </section>
+
+  <footer>Precep · ConsultaIA · Ferramenta de apoio. Não substitui a avaliação médica. Contato: janan.almeida@gmail.com</footer>
+</div>
+<script>
+// Leva a origem do link (?r=grupo-x) para o cadastro, para as métricas de origem.
+(function(){
+  var r=new URLSearchParams(location.search).get('r')||'landing';
+  document.querySelectorAll('[data-cta]').forEach(function(a){a.href='./?r='+encodeURIComponent(r)});
+})();
+</script>
+</body>
+</html>
