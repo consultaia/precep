@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Precep — o plantão na palma da mão</title>
+<title>Precep — só você no plantão? Não mais.</title>
 <meta name="description" content="Doses de intubação pelo peso, receitas prontas, evolução em toques e passo a passo para o internato. 5 dias grátis.">
 <meta name="theme-color" content="#0F1619">
-<meta property="og:title" content="Precep — o plantão na palma da mão">
-<meta property="og:description" content="Doses pelo peso, receitas prontas, evolução em toques e passo a passo para o internato. 5 dias grátis.">
+<meta property="og:title" content="3 da manhã. Só você no plantão. E agora?">
+<meta property="og:description" content="Intubação, ventilação, procedimentos, gasometria e scores, calculados para o seu paciente. 5 dias grátis no Precep.">
 <meta property="og:image" content="https://consultaia.github.io/precep/card.png">
 <meta property="og:url" content="https://consultaia.github.io/precep/conheca.html">
 <meta name="twitter:card" content="summary_large_image">
@@ -69,6 +69,7 @@ h2{font-family:var(--f-num);font-weight:700;font-size:clamp(28px,5vw,40px);line-
 .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;border-radius:14px 0 0 14px;background:var(--k,var(--accent))}
 .card h3{margin:0 0 4px;font-family:var(--f-num);font-size:24px;font-weight:700}
 .card p{margin:0;color:var(--muted);font-size:16px}
+.card .pq{color:var(--fg);font-family:var(--f-num);font-weight:700;font-size:24px;line-height:1.15;margin:0 0 8px}
 .quem{display:flex;flex-wrap:wrap;gap:8px}
 .quem span{border:1px solid var(--line);border-radius:999px;padding:8px 14px;background:var(--surface)}
 .preco{display:grid;gap:18px;align-items:center}
@@ -94,8 +95,8 @@ footer{padding:28px 0 40px;border-top:1px solid var(--line);font-size:14px;color
 
   <div class="hero">
     <div>
-      <h1>O plantão na <em>palma da mão</em>.</h1>
-      <p class="sub">Dose de intubação em mg e ml pelo peso, receita pronta para copiar, evolução em toques e o passo a passo que ninguém te explicou no internato. Adulto e pediatria.</p>
+      <h1>3 da manhã. Só você no plantão. <em>E agora?</em></h1>
+      <p class="sub">Dose, parâmetro, técnica e conduta em segundos, calculados para o paciente na sua frente. Para quem está no internato, acabou de se formar ou dá plantão sozinho. Adulto e pediatria.</p>
       <a class="cta" href="./" data-cta>Começar 5 dias grátis</a>
       <p class="nota">Sem cartão. Depois, R$ 44,90 por 6 meses no Pix, sem renovação automática.</p>
     </div>
@@ -106,6 +107,21 @@ footer{padding:28px 0 40px;border-top:1px solid var(--line);font-size:14px;color
       <div class="dose" style="--k:var(--c-e)"><h3>Fentanil contínuo</h3><div class="m">3 mcg/kg/h · 50 mcg/ml</div><div class="v">270 mcg/h<span>5,4 ml/h</span></div></div>
     </div>
   </div>
+
+  <section>
+    <h2>Já passou por isso?</h2>
+    <div class="grid g2">
+      <div class="card q" style="--k:var(--c-i)"><p class="pq">Vai precisar intubar e bateu a dúvida de qual droga e qual dose usar?</p><p><b>⚡ Intubar:</b> peso e motivo. Sai o indutor, o bloqueador e quantos ml aspirar, ajustados para choque, TCE, broncoespasmo, obeso e criança.</p></div>
+      <div class="card q" style="--k:var(--accent)"><p class="pq">Só vai ter você para definir os parâmetros da ventilação. Tem segurança?</p><p><b>🫁 Ventilação:</b> volume corrente pelo peso predito, ajuste para SDRA, asma/DPOC e TCE, e a PEEP titulada pela driving pressure.</p></div>
+      <div class="card q" style="--k:#FF8A3D"><p class="pq">Uma drenagem de tórax para fazer. Está afiado na técnica?</p><p><b>🩺 Procedimentos:</b> 12 procedimentos com indicação, material, passo a passo e nota pronta. Dose máxima de anestésico local em ml para o peso do paciente.</p></div>
+      <div class="card q" style="--k:#E05A7A"><p class="pq">Gasometria na mão e o raciocínio travou?</p><p><b>🩸 Gasometria:</b> distúrbio primário, compensação, anion gap corrigido, delta-delta e a conduta sugerida.</p></div>
+      <div class="card q" style="--k:var(--c-e)"><p class="pq">Paciente chocado e você precisa da noradrenalina em ml/h agora?</p><p><b>💉 Infusões:</b> noradrenalina, sedação e analgesia em ml/h pelo peso, com a diluição da sua unidade.</p></div>
+      <div class="card q" style="--k:var(--c-p)"><p class="pq">Alta da criança e não lembra a dose da amoxicilina?</p><p><b>💊 Prescrever:</b> dose pelo peso e receita pronta por condição, para copiar no prontuário.</p></div>
+      <div class="card q" style="--k:var(--c-a)"><p class="pq">Fila de evoluções e o plantão não acaba?</p><p><b>📝 Evoluir:</b> toque nos achados e sai o texto corrido, com os exames do paciente já preenchidos.</p></div>
+      <div class="card q" style="--k:#9AA5AA"><p class="pq">Wells, CURB-65, Child-Pugh… de cabeça, às 3 da manhã?</p><p><b>🧮 Scores:</b> 20 scores por especialidade, com o resultado e o que fazer.</p></div>
+    </div>
+    <div style="margin-top:18px"><a class="cta" href="./" data-cta>Quero plantão com segurança: 5 dias grátis</a></div>
+  </section>
 
   <section>
     <h2>Tudo o que o plantão pede, em um toque</h2>
