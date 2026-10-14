@@ -1,5 +1,5 @@
 // Precep — funciona offline. Troque VERSAO a cada deploy da casca.
-const VERSAO = 'precep-v1';
+const VERSAO = 'precep-v2';
 const ARQS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 const CDN = ['cdn.jsdelivr.net', 'fonts.googleapis.com', 'fonts.gstatic.com'];
 self.addEventListener('install', e => e.waitUntil(caches.open(VERSAO).then(c => c.addAll(ARQS)).then(() => self.skipWaiting())));

@@ -228,7 +228,7 @@ var CFG = {
   SB_URL:  'https://jtkkqmqlydqenxwnttyi.supabase.co',
   SB_ANON: 'sb_publishable_KhmIwvVbXtecadyEPrBonQ_ZUTQVLRP',
   WORKER:  'https://precep-pagamentos.janan-almeida.workers.dev',
-  CONTATO: 'SEU E-MAIL OU WHATSAPP DE CONTATO'   // aparece nos Termos (LGPD)
+  CONTATO: 'SEU E-MAIL OU WHATSAPP DE CONTATO'   // aparece nos Termos
 };
 /* ================================ */
 (function(){
@@ -482,9 +482,9 @@ if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.service
 var TERMOS='<h3>Termos de uso</h3>'+
  '<p>O Precep é uma ferramenta de <b>apoio</b> para profissionais e estudantes da saúde. Doses, modelos de receita, textos de evolução e guias são sugestões baseadas em bulas e diretrizes, e <b>não substituem a avaliação, o julgamento e a responsabilidade do médico</b> que atende o paciente. Confira sempre dose, apresentação, alergias, gestação, função renal e interações antes de prescrever. Estudantes devem usar sob supervisão.</p>'+
  '<p>O acesso é pessoal e intransferível. Após os 5 dias grátis, o acesso por 6 meses é liberado mediante pagamento único por Pix, sem renovação automática. Valores pagos não são reembolsados após o uso, salvo o previsto no Código de Defesa do Consumidor.</p>'+
- '<h3>Privacidade (LGPD)</h3>'+
- '<p><b>Seus dados:</b> nome, e-mail, WhatsApp e categoria, usados para criar a conta, liberar o acesso e falar com você. O registro de uso do app é agregado e serve para melhorar o produto.</p>'+
- '<p><b>Dados de pacientes</b> (módulo Pacientes e fotos): você é o responsável por eles. Registre apenas leito e iniciais, nunca nome completo, CPF, prontuário ou rosto. Os dados ficam em servidor com acesso restrito a você e aos colegas das pastas que você compartilhar. Você pode apagar pacientes, fotos e pastas a qualquer momento, e pedir a exclusão da conta pelo contato abaixo.</p>'+
+ '<h3>Privacidade</h3>'+
+ '<p><b>Seus dados:</b> nome, e-mail, WhatsApp e categoria, usados para criar a conta, liberar o acesso e falar com você. Para apagar a conta, use o contato abaixo.</p>'+
+ '<p><b>Pacientes:</b> registre só leito e iniciais. Você é responsável pelo que salvar.</p>'+
  '<p>Contato: '+(CFG.CONTATO||'—')+'</p>';
 document.addEventListener('click',function(e){if(e.target.id==='verTermos'){var d=document.createElement('div');d.className='sheet';d.innerHTML='<div role="dialog" aria-label="Termos de uso" style="max-height:85vh;overflow:auto">'+TERMOS+'<button class="btn" data-x>Fechar</button></div>';d.onclick=function(ev){if(ev.target===d||ev.target.hasAttribute('data-x'))d.remove()};document.body.appendChild(d)}});
 
