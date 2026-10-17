@@ -69,6 +69,16 @@ h2{font-family:var(--f-num);font-weight:700;font-size:clamp(28px,5vw,40px);line-
 .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;border-radius:14px 0 0 14px;background:var(--k,var(--accent))}
 .card h3{margin:0 0 4px;font-family:var(--f-num);font-size:24px;font-weight:700}
 .card p{margin:0;color:var(--muted);font-size:16px}
+.demo{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+.dpt label{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.dpt input{width:140px;background:var(--surface2);border:2px solid var(--accent);border-radius:10px;padding:8px 12px;font-family:var(--f-num);font-size:30px;font-weight:700;color:var(--fg)}
+.dseg{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.dseg button{border:1px solid var(--line);background:var(--surface2);color:var(--fg);border-radius:999px;padding:8px 14px;font-weight:700;font-size:15px;font-family:var(--f-body)}
+.dseg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.dr{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:baseline;padding:10px 0 10px 14px;border-top:1px solid var(--line);position:relative}
+.dr::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:5px;border-radius:3px;background:var(--k)}
+.dr b{font-size:17px}.dr .v{font-family:var(--f-num);font-weight:700;font-size:24px;text-align:right}.dr .v span{color:var(--accent);margin-left:8px}
+.dr small{grid-column:1/-1;color:var(--muted);font-size:14px}
 .card .pq{color:var(--fg);font-family:var(--f-num);font-weight:700;font-size:24px;line-height:1.15;margin:0 0 8px}
 .quem{display:flex;flex-wrap:wrap;gap:8px}
 .quem span{border:1px solid var(--line);border-radius:999px;padding:8px 14px;background:var(--surface)}
@@ -107,6 +117,18 @@ footer{padding:28px 0 40px;border-top:1px solid var(--line);font-size:14px;color
       <div class="dose" style="--k:var(--c-e)"><h3>Fentanil contínuo</h3><div class="m">3 mcg/kg/h · 50 mcg/ml</div><div class="v">270 mcg/h<span>5,4 ml/h</span></div></div>
     </div>
   </div>
+
+  <section id="demo">
+    <h2>Teste agora, sem cadastro</h2>
+    <p class="sub" style="font-size:17px;margin-bottom:12px">Ponha o peso e escolha o cenário. Veja o que o app entrega na hora de intubar.</p>
+    <div class="demo">
+      <div class="dpt"><label for="dPeso">Peso (kg)</label><input id="dPeso" inputmode="decimal" value="70" autocomplete="off"></div>
+      <div class="dseg" role="group" aria-label="Cenário"><button data-dc="padrao" aria-pressed="true">Padrão</button><button data-dc="choque" aria-pressed="false">Choque</button><button data-dc="bronco" aria-pressed="false">Broncoespasmo</button></div>
+      <div id="dRes"></div>
+      <p class="nota">Demonstração com o peso total. No app, as doses se ajustam ao peso ideal ou magro no obeso, a 10 condições clínicas e à criança, com volume corrente pelo peso predito.</p>
+    </div>
+    <div style="margin-top:16px"><a class="cta" href="./" data-cta>Ver tudo isso no plantão: 5 dias grátis</a></div>
+  </section>
 
   <section>
     <h2>Já passou por isso?</h2>
@@ -178,6 +200,21 @@ footer{padding:28px 0 40px;border-top:1px solid var(--line);font-size:14px;color
   <footer>Precep · ConsultaIA · Ferramenta de apoio. Não substitui a avaliação médica. Contato: janan.almeida@gmail.com</footer>
 </div>
 <script>
+// Mini-demo: doses de sequência rápida pelo peso total (o app ajusta por peso ideal/magro e por condição).
+(function(){
+  var C='padrao',fmt=function(n,d){return n.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d})};
+  var ml=function(n){return n>=1?fmt(Math.round(n*10)/10,1):fmt(Math.round(n*100)/100,2)};
+  var CEN={
+    padrao:[['Fentanil','pré-tratamento, lento, 3 min antes',2,50,'mcg','var(--c-e)'],['Etomidato','indutor',0.3,2,'mg','var(--c-i)'],['Rocurônio','bloqueador',1.2,10,'mg','#FF4D4D']],
+    choque:[['Cetamina','indutor, dose reduzida no choque',1,50,'mg','var(--c-i)'],['Rocurônio','bloqueador, dose maior no choque',1.6,10,'mg','#FF4D4D'],['Adrenalina push-dose','deixe aspirada: 10 mcg/ml, 5–20 mcg por bolus',null,10,'mcg','var(--c-g)']],
+    bronco:[['Cetamina','indutor broncodilatador',1.5,50,'mg','var(--c-i)'],['Rocurônio','bloqueador',1.2,10,'mg','#FF4D4D']]};
+  function calc(){var w=parseFloat(String(document.getElementById('dPeso').value).replace(',','.')),el=document.getElementById('dRes');
+    if(!(w>=3&&w<=250)){el.innerHTML='<p class="nota">Informe um peso entre 3 e 250 kg.</p>';return}
+    el.innerHTML=CEN[C].map(function(d){var mg=d[2]==null?10:d[2]*w;return '<div class="dr" style="--k:'+d[5]+'"><b>'+d[0]+'</b><div class="v">'+fmt(Math.round(mg*10)/10,mg<10?1:0)+' '+d[4]+'<span>'+ml(mg/d[3])+' ml</span></div><small>'+(d[2]!=null?fmt(d[2],1)+' '+d[4]+'/kg · ':'')+d[1]+'</small></div>'}).join('')}
+  document.getElementById('dPeso').addEventListener('input',calc);
+  Array.prototype.forEach.call(document.querySelectorAll('[data-dc]'),function(b){b.onclick=function(){C=b.dataset.dc;Array.prototype.forEach.call(document.querySelectorAll('[data-dc]'),function(x){x.setAttribute('aria-pressed',x===b)});calc()}});
+  calc();
+})();
 // Leva a origem do link (?r=grupo-x) para o cadastro, para as métricas de origem.
 (function(){
   var r=new URLSearchParams(location.search).get('r')||'landing';
