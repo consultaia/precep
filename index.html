@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://jtkkqmqlydqenxwnttyi.supabase.co; connect-src 'self' https://jtkkqmqlydqenxwnttyi.supabase.co wss://jtkkqmqlydqenxwnttyi.supabase.co https://precep-pagamentos.janan-almeida.workers.dev https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Precep</title>
 <meta name="description" content="O plantão na palma da mão: intubar, prescrever, evoluir e acompanhar pacientes. Adulto e pediatria.">
@@ -99,7 +100,7 @@ form{display:flex;flex-direction:column;gap:12px}
 .aceite{display:flex;gap:8px;align-items:flex-start;font-size:14px;color:var(--muted)}.aceite input{margin-top:3px;width:18px;height:18px;flex:0 0 auto}
 .sheet h3{margin:4px 0}.sheet p{font-size:14px;line-height:1.5;margin:6px 0}
 .sheet ol{margin:4px 0 12px;padding-left:20px}.sheet li{margin-bottom:6px}
-.offline{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--muted);z-index:40}
+.offline{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top,0px));pointer-events:none;opacity:.95;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--muted);z-index:40}
 
 /* painel do admin */
 .adm{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:18px 48px}
@@ -287,7 +288,7 @@ async function boot(){
   try{ res=await comTempo(sb.rpc('precep_iniciar',{p_nome:meta.nome||null,p_whats:meta.whatsapp||null,p_cat:meta.categoria||null,p_origem:meta.origem||null}),9000) }
   catch(e){ res={error:e} }
   if(res.error){
-    if(rede(res.error)&&cacheValido(cache))return abrirApp(cache,true);
+    if(rede(res.error)&&cacheValido(cache)){window.precepSB=sb;window.precepUser={id:sess.user.id,email:sess.user.email,nome:cache.nome||'',admin:!!cache.admin};return abrirApp(cache,true)}
     if(rede(res.error)){msg($('entMsg'),'Sem internet. Conecte uma vez para entrar.','erro');return ver('vEntrar')}
     if(/JWT|token|autentic/i.test(res.error.message||'')){await sair();return}
     msg($('entMsg'),'Erro ao abrir sua conta: '+(res.error.message||''),'erro');return ver('vEntrar');
@@ -296,11 +297,12 @@ async function boot(){
   window.precepSB=sb;window.precepUser={id:sess.user.id,email:sess.user.email,nome:p.nome||'',admin:!!p.admin};
   if(p.admin&&location.hash==='#admin')return abrirAdmin();
   if(p.admin||(p.acesso_ate&&Date.parse(p.acesso_ate)>Date.parse(p.agora)))return carregarConteudo(p);
-  var c0=lsGet('precep_cache');if(c0&&c0.html)lsDel('precep_cache');
+  ['precep_cache','precep_pac','precep_rx'].forEach(lsDel);
   return abrirPagar(p);
 }
 function agora(){return Date.now()+S.offset}
-function cacheValido(c){return c&&c.html&&(c.admin||(c.acesso_ate&&Date.parse(c.acesso_ate)>Date.now()))}
+/* offline: até 7 dias desde a última confirmação do servidor (e relógio que não andou para trás) */
+function cacheValido(c){var n=Date.now();return !!(c&&c.html&&c.visto&&n-c.visto<7*864e5&&n>=c.visto-6e4&&(c.admin||(c.acesso_ate&&Date.parse(c.acesso_ate)>n)))}
 
 async function carregarConteudo(p){
   var cache=lsGet('precep_cache')||{};
@@ -312,7 +314,7 @@ async function carregarConteudo(p){
       var c=await comTempo(sb.from('precep_app').select('versao,html').single(),15000);
       if(c.error)throw c.error;html=c.data.html;
     }
-    cache={versao:v.data.versao,html:html,acesso_ate:p.acesso_ate,admin:!!p.admin,status:p.status,nome:p.nome,email:p.email};
+    cache={versao:v.data.versao,html:html,acesso_ate:p.acesso_ate,admin:!!p.admin,status:p.status,nome:p.nome,email:p.email,visto:Date.now()};
     lsSet('precep_cache',cache);
     abrirApp(cache,false);
   }catch(e){
@@ -354,6 +356,7 @@ async function checarVersao(){
   try{
     var v=await comTempo(sb.from('precep_app').select('versao').single(),9000);
     var c=lsGet('precep_cache')||{};
+    if(!v.error&&v.data&&c.html){c.visto=Date.now();lsSet('precep_cache',c)}
     if(v.error||!v.data||!c.versao||v.data.versao===c.versao)return;
     var f=document.createElement('div');f.className='faixa';f.id='faixaVersao';f.style.borderLeftColor='var(--accent)';
     f.innerHTML='<span><b>Atualização disponível.</b> Toque para carregar a versão nova.</span><button class="btn sm">Atualizar</button>';
@@ -394,7 +397,7 @@ function abrirConta(){
     if(a==='instalar'){d.remove();window.precepInstalar()}};
   document.body.appendChild(d);
 }
-async function sair(){lsDel('precep_cache');lsDel('precep_pix');try{await sb.auth.signOut()}catch(e){}location.hash='';location.reload()}
+async function sair(){['precep_cache','precep_pix','precep_pac','precep_pasta','precep_pastas','precep_rx'].forEach(lsDel);try{await sb.auth.signOut()}catch(e){}location.hash='';location.reload()}
 
 /* ---------------- entrar / cadastrar ---------------- */
 function aba(cad){$('abaCad').setAttribute('aria-pressed',cad);$('abaEnt').setAttribute('aria-pressed',!cad);$('fCad').hidden=!cad;$('fEnt').hidden=cad;$('fNova').hidden=true;msg($('entMsg'),'')}
