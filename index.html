@@ -6,6 +6,13 @@
 <title>Precep</title>
 <meta name="description" content="O plantão na palma da mão: intubar, prescrever, evoluir e acompanhar pacientes. Adulto e pediatria.">
 <meta name="theme-color" content="#0F1619">
+<script>
+/* Tema: automático (segue o celular), claro ou escuro. Aplicado antes de desenhar a tela. */
+(function(){var t='auto';try{t=localStorage.getItem('precep_tema')||'auto'}catch(e){}
+  if(t==='claro')document.documentElement.setAttribute('data-theme','light');else if(t==='escuro')document.documentElement.setAttribute('data-theme','dark');
+  var esc=t==='escuro'||(t==='auto'&&!(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches));
+  document.querySelector('meta[name="theme-color"]').setAttribute('content',esc?'#0F1619':'#EEF2F3')})();
+</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Precep">
 <meta property="og:title" content="Precep — o plantão na palma da mão">
@@ -31,6 +38,14 @@
   --bg:#EEF2F3; --surface:#FFFFFF; --surface2:#F4F7F8; --line:#D3DCDF;
   --fg:#0E1A1F; --muted:#4F6268; --accent:#0B7C83; --on-accent:#FFFFFF;
   --pref:#1C8A4E; --caut:#9A6200; --evitar:#C8352A; color-scheme:light } }
+:root[data-theme="light"]{
+  --bg:#EEF2F3; --surface:#FFFFFF; --surface2:#F4F7F8; --line:#D3DCDF;
+  --fg:#0E1A1F; --muted:#4F6268; --accent:#0B7C83; --on-accent:#FFFFFF;
+  --pref:#1C8A4E; --caut:#9A6200; --evitar:#C8352A; color-scheme:light }
+.tema{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;font-size:17px;margin-left:6px;padding:0}
+.segt{display:flex;gap:4px;background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:3px;margin:10px 0}
+.segt button{flex:1;border:0;background:transparent;border-radius:999px;padding:8px 6px;font-weight:700;font-size:14px;color:var(--muted)}
+.segt button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 [hidden]{display:none!important}
 *{box-sizing:border-box}
@@ -315,7 +330,8 @@ function abrirApp(c,offline){
     Array.prototype.slice.call(el.querySelectorAll('script')).forEach(function(s){var code=s.textContent;s.remove();try{(new Function(code))()}catch(e){console.error(e)}});
     S.montado=true;
     var brand=el.querySelector('.brand');
-    if(brand){var b=document.createElement('button');b.className='conta';b.id='bConta';b.setAttribute('aria-label','Minha conta');b.textContent=((S.perfil.nome||S.perfil.email||'?')[0]||'?').toUpperCase();b.onclick=abrirConta;brand.appendChild(b)}
+    if(brand){var bt=document.createElement('button');bt.className='tema';bt.id='bTema';bt.onclick=trocarTema;brand.appendChild(bt);aplicarTema(temaAtual());
+      var b=document.createElement('button');b.className='conta';b.id='bConta';b.setAttribute('aria-label','Minha conta');b.textContent=((S.perfil.nome||S.perfil.email||'?')[0]||'?').toUpperCase();b.onclick=abrirConta;brand.appendChild(b)}
   }
   faixaTeste();
   ver('vApp');
@@ -353,14 +369,25 @@ async function checarVersao(){
 document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')checarVersao()});
 setInterval(checarVersao,15*60000);
 
+function temaAtual(){try{return localStorage.getItem('precep_tema')||'auto'}catch(e){return 'auto'}}
+function temaEscuro(t){return t==='escuro'||(t==='auto'&&!(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches))}
+function aplicarTema(t){try{localStorage.setItem('precep_tema',t)}catch(e){}
+  var h=document.documentElement;if(t==='claro')h.setAttribute('data-theme','light');else if(t==='escuro')h.setAttribute('data-theme','dark');else h.removeAttribute('data-theme');
+  var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',temaEscuro(t)?'#0F1619':'#EEF2F3');
+  var b=$('bTema');if(b){b.textContent=temaEscuro(t)?'☀️':'🌙';b.setAttribute('aria-label',temaEscuro(t)?'Mudar para o modo claro':'Mudar para o modo escuro')}}
+function trocarTema(){aplicarTema(temaEscuro(temaAtual())?'claro':'escuro')}
+window.precepTema=aplicarTema;
+if(window.matchMedia)try{matchMedia('(prefers-color-scheme: light)').addEventListener('change',function(){if(temaAtual()==='auto')aplicarTema('auto')})}catch(e){}
 function abrirConta(){
   var p=S.perfil||{},st={pago:'Acesso pago',cortesia:'Cortesia',teste:'Teste grátis',expirado:'Expirado'}[p.status]||'';
   var d=document.createElement('div');d.className='sheet';
   d.innerHTML='<div role="dialog" aria-label="Minha conta"><h3>'+esc(p.nome||'Minha conta')+'</h3><div class="miudo">'+esc(p.email||'')+'</div>'+
     (p.admin?'<div class="msg ok">Administrador</div>':'<div class="msg">'+st+' até <b>'+fmtData(p.acesso_ate)+'</b></div>')+
     (p.admin?'<button class="btn" data-a="admin">Painel do administrador</button>':(p.status!=='pago'?'<button class="btn" data-a="pagar">Liberar 6 meses por Pix</button>':'<button class="btn ghost" data-a="pagar">Renovar antecipado</button>'))+
+    '<div class="miudo" style="margin-top:12px">Aparência</div><div class="segt" role="group" aria-label="Tema">'+[['auto','Automático'],['claro','Claro'],['escuro','Escuro']].map(function(x){return '<button data-tema="'+x[0]+'" aria-pressed="'+(temaAtual()===x[0])+'">'+x[1]+'</button>'}).join('')+'</div>'+
     (window.precepInstalado?'':'<button class="btn ghost" data-a="instalar">📲 Instalar o app</button>')+'<button class="btn ghost" data-a="sair">Sair da conta</button><button class="lnk" data-a="fechar">Fechar</button></div>';
   d.onclick=function(e){var a=e.target.dataset&&e.target.dataset.a;if(e.target===d||a==='fechar'){d.remove();return}
+    var tm=e.target.dataset&&e.target.dataset.tema;if(tm){aplicarTema(tm);Array.prototype.forEach.call(d.querySelectorAll('[data-tema]'),function(x){x.setAttribute('aria-pressed',x.dataset.tema===tm)});return}
     if(a==='admin'){d.remove();location.hash='admin';abrirAdmin()}
     if(a==='pagar'){d.remove();abrirPagar(S.perfil,true)}
     if(a==='sair'){d.remove();sair()}
