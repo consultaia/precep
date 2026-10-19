@@ -44,6 +44,8 @@
   --fg:#0E1A1F; --muted:#4F6268; --accent:#0B7C83; --on-accent:#FFFFFF;
   --pref:#1C8A4E; --caut:#9A6200; --evitar:#C8352A; color-scheme:light }
 .tema{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;font-size:17px;margin-left:6px;padding:0}
+.link-pc{display:flex;gap:6px;align-items:center;margin:6px 0 0}
+.link-pc input{flex:1;min-width:0;font:inherit;font-size:14px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);color:var(--fg)}
 .segt{display:flex;gap:4px;background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:3px;margin:10px 0}
 .segt button{flex:1;border:0;background:transparent;border-radius:999px;padding:8px 6px;font-weight:700;font-size:14px;color:var(--muted)}
 .segt button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
@@ -260,10 +262,10 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return
 function lsGet(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 function lsDel(k){try{localStorage.removeItem(k)}catch(e){}}
-function copiar(txt,el){
+function copiar(txt,el,campo){
   var ok=function(){var o=el.textContent;el.textContent='Copiado';setTimeout(function(){el.textContent=o},1800)};
   try{navigator.clipboard.writeText(txt).then(ok,function(){selecionar()})}catch(e){selecionar()}
-  function selecionar(){var t=$('pgCode');if(t&&t.value===txt){t.focus();t.select()}}
+  function selecionar(){var t=campo||$('pgCode');if(t&&t.value===txt){t.focus();t.select()}}
 }
 function rede(err){var m=String(err&&(err.message||err)||'');return !navigator.onLine||/fetch|network|Failed|timeout|Load failed/i.test(m)}
 function comTempo(p,ms){return Promise.race([p,new Promise(function(_,r){setTimeout(function(){r(new Error('timeout'))},ms)})])}
@@ -388,15 +390,22 @@ function abrirConta(){
     (p.admin?'<div class="msg ok">Administrador</div>':'<div class="msg">'+st+' até <b>'+fmtData(p.acesso_ate)+'</b></div>')+
     (p.admin?'<button class="btn" data-a="admin">Painel do administrador</button>':(p.status!=='pago'?'<button class="btn" data-a="pagar">Liberar 6 meses por Pix</button>':'<button class="btn ghost" data-a="pagar">Renovar antecipado</button>'))+
     '<div class="miudo" style="margin-top:12px">Aparência</div><div class="segt" role="group" aria-label="Tema">'+[['auto','Automático'],['claro','Claro'],['escuro','Escuro']].map(function(x){return '<button data-tema="'+x[0]+'" aria-pressed="'+(temaAtual()===x[0])+'">'+x[1]+'</button>'}).join('')+'</div>'+
+    '<div class="miudo" style="margin-top:12px">Usar no computador</div><div class="link-pc"><input id="linkApp" readonly value="'+esc(linkApp())+'" aria-label="Endereço do Precep"><button class="btn sm" data-a="copiarlink">Copiar</button></div>'+
+    '<div class="miudo" style="margin:4px 0 8px">Abra esse endereço no navegador do computador e entre com o mesmo e-mail e senha.</div>'+
+    (navigator.share?'<button class="btn ghost" data-a="enviarlink">📤 Enviar o link para mim</button>':'')+
     (window.precepInstalado?'':'<button class="btn ghost" data-a="instalar">📲 Instalar o app</button>')+'<button class="btn ghost" data-a="sair">Sair da conta</button><button class="lnk" data-a="fechar">Fechar</button></div>';
   d.onclick=function(e){var a=e.target.dataset&&e.target.dataset.a;if(e.target===d||a==='fechar'){d.remove();return}
     var tm=e.target.dataset&&e.target.dataset.tema;if(tm){aplicarTema(tm);Array.prototype.forEach.call(d.querySelectorAll('[data-tema]'),function(x){x.setAttribute('aria-pressed',x.dataset.tema===tm)});return}
     if(a==='admin'){d.remove();location.hash='admin';abrirAdmin()}
     if(a==='pagar'){d.remove();abrirPagar(S.perfil,true)}
     if(a==='sair'){d.remove();sair()}
-    if(a==='instalar'){d.remove();window.precepInstalar()}};
+    if(a==='instalar'){d.remove();window.precepInstalar()}
+    if(a==='copiarlink'){var li=$('linkApp');li.select();copiar(linkApp(),e.target,li)}
+    if(a==='enviarlink'){try{navigator.share({title:'Precep',text:'Precep: entre com o mesmo e-mail e senha.',url:linkApp()}).catch(function(){})}catch(_){}}};
+  var li0=d.querySelector('#linkApp');if(li0)li0.onfocus=function(){this.select()};
   document.body.appendChild(d);
 }
+function linkApp(){return (location.origin+location.pathname).replace(/index\.html$/,'')}
 async function sair(){['precep_cache','precep_pix','precep_pac','precep_pasta','precep_pastas','precep_rx'].forEach(lsDel);try{await sb.auth.signOut()}catch(e){}location.hash='';location.reload()}
 
 /* ---------------- entrar / cadastrar ---------------- */
