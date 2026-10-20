@@ -100,7 +100,7 @@ footer{padding:28px 0 40px;border-top:1px solid var(--line);font-size:14px;color
 <div class="w">
   <header class="top">
     <div class="marca">Precep<span>.</span></div>
-    <a class="lnk" href="./" data-cta>Já tenho conta</a>
+    <a class="lnk" href="./#entrar" data-cta>Já tenho conta</a>
   </header>
 
   <div class="hero">
@@ -218,7 +218,7 @@ footer{padding:28px 0 40px;border-top:1px solid var(--line);font-size:14px;color
 // Leva a origem do link (?r=grupo-x) para o cadastro, para as métricas de origem.
 (function(){
   var r=new URLSearchParams(location.search).get('r')||'landing';
-  document.querySelectorAll('[data-cta]').forEach(function(a){a.href='./?r='+encodeURIComponent(r)});
+  document.querySelectorAll('[data-cta]').forEach(function(a){a.href='./?r='+encodeURIComponent(r)+(a.hash||'')});
 })();
 </script>
 </body>

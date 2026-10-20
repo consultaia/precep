@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://jtkkqmqlydqenxwnttyi.supabase.co; connect-src 'self' https://jtkkqmqlydqenxwnttyi.supabase.co wss://jtkkqmqlydqenxwnttyi.supabase.co https://precep-pagamentos.janan-almeida.workers.dev https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://jtkkqmqlydqenxwnttyi.supabase.co; connect-src 'self' https://jtkkqmqlydqenxwnttyi.supabase.co wss://jtkkqmqlydqenxwnttyi.supabase.co https://precep-pagamentos.janan-almeida.workers.dev https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Precep</title>
 <meta name="description" content="O plantão na palma da mão: intubar, prescrever, evoluir e acompanhar pacientes. Adulto e pediatria.">
@@ -14,17 +14,21 @@
   var esc=t==='escuro'||(t==='auto'&&!(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches));
   document.querySelector('meta[name="theme-color"]').setAttribute('content',esc?'#0F1619':'#EEF2F3')})();
 </script>
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Precep">
 <meta property="og:title" content="Precep — o plantão na palma da mão">
 <meta property="og:description" content="Intubar, prescrever, evoluir e acompanhar. Doses pelo peso, receitas e evoluções prontas para colar. 5 dias grátis.">
-<meta property="og:image" content="icon-512.png">
+<meta property="og:image" content="https://consultaia.github.io/precep/card.png">
+<meta property="og:url" content="https://consultaia.github.io/precep/">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" integrity="sha384-0w2KAL2YHP6wKOkUDzkCDGgVvfmHnj02DHeQ6XcHOgTfFsGyonKOpShMH1x6nk9o" crossorigin="anonymous"></script>
 <style>
 /* Casca: entrada, pagamento, painel do admin. O app vem do banco depois do login. */
 :root{
@@ -43,7 +47,7 @@
   --bg:#EEF2F3; --surface:#FFFFFF; --surface2:#F4F7F8; --line:#D3DCDF;
   --fg:#0E1A1F; --muted:#4F6268; --accent:#0B7C83; --on-accent:#FFFFFF;
   --pref:#1C8A4E; --caut:#9A6200; --evitar:#C8352A; color-scheme:light }
-.tema{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;font-size:17px;margin-left:6px;padding:0}
+.tema{border:1px solid var(--line);background:var(--surface);border-radius:999px;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;font-size:17px;margin-left:6px;padding:0}
 .link-pc{display:flex;gap:6px;align-items:center;margin:6px 0 0}
 .link-pc input{flex:1;min-width:0;font:inherit;font-size:14px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);color:var(--fg)}
 .segt{display:flex;gap:4px;background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:3px;margin:10px 0}
@@ -73,7 +77,7 @@ form{display:flex;flex-direction:column;gap:12px}
 .btn.ghost{background:transparent;color:var(--accent)}
 .btn.sm{padding:7px 11px;font-size:14px;border-radius:8px}
 .btn:disabled{opacity:.6;cursor:wait}
-.lnk{border:0;background:none;color:var(--accent);font-weight:700;padding:0;cursor:pointer;text-decoration:underline}
+.lnk{border:0;background:none;color:var(--accent);font-weight:700;padding:10px 4px;min-height:44px;display:inline-flex;align-items:center;cursor:pointer;text-decoration:underline}
 .msg{font-size:15px;border-left:4px solid var(--caut);background:var(--surface);padding:9px 11px;border-radius:0 8px 8px 0}
 .msg.ok{border-color:var(--pref)} .msg.erro{border-color:var(--evitar)}
 .pts{list-style:none;padding:0;margin:0 0 22px;display:flex;flex-direction:column;gap:8px}
@@ -94,7 +98,7 @@ form{display:flex;flex-direction:column;gap:12px}
 
 /* faixa de teste e botão de conta, dentro do app */
 .faixa{display:flex;align-items:center;gap:10px;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--caut);border-radius:0 8px 8px 0;padding:8px 10px;margin:10px 0 0;font-size:14px}
-.conta{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-weight:700;cursor:pointer;flex:0 0 auto}
+.conta{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-weight:700;cursor:pointer;flex:0 0 auto}
 .sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;display:flex;align-items:flex-end;justify-content:center}
 .sheet>div{background:var(--bg);border:1px solid var(--line);border-radius:16px 16px 0 0;width:100%;max-width:520px;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:10px}
 .sheet h3{margin:0;font-size:20px}
@@ -254,7 +258,16 @@ var CFG = {
 var $=function(i){return document.getElementById(i)};
 var VIEWS=['vCarregando','vEntrar','vPagar','vApp','vAdmin'];
 function ver(v){VIEWS.forEach(function(x){$(x).hidden=x!==v});window.scrollTo(0,0)}
-function msg(el,t,tipo){el.textContent=t;el.className='msg'+(tipo?' '+tipo:'');el.hidden=!t}
+function msg(el,t,tipo){el.textContent=t;el.className='msg'+(tipo?' '+tipo:'');el.hidden=!t;el.setAttribute('role',tipo==='erro'?'alert':'status')}
+function mesesCfg(){return (S.cfg&&S.cfg.meses)||6}
+/* o HTML do app (1,2 MB) fica no Cache Storage, não no localStorage (cota de ~5 MB dividida com o restante do site) */
+async function guardarHtml(h){try{if(!window.caches)return false;var c=await caches.open('precep-app');await c.put('./app-html',new Response(h,{headers:{'Content-Type':'text/html; charset=utf-8'}}));return true}catch(e){return false}}
+async function lerHtml(c){if(c&&c.html)return c.html;try{if(!window.caches)return null;var k=await caches.open('precep-app');var r=await k.match('./app-html');return r?await r.text():null}catch(e){return null}}
+async function abrirCache(c){var h=await lerHtml(c);if(!h)return false;abrirApp(c,true,h);return true}
+function abrirSheet(d){var prev=document.activeElement,box=d.firstElementChild;box.setAttribute('aria-modal','true');box.tabIndex=-1;document.body.style.overflow='hidden';
+  var fecha=function(){d.remove();document.body.style.overflow='';if(prev&&prev.focus)prev.focus()};d.addEventListener('keydown',function(e){if(e.key==='Escape')fecha()});
+  var obs=new MutationObserver(function(){if(!document.body.contains(d)){document.body.style.overflow='';obs.disconnect()}});obs.observe(document.body,{childList:true});
+  document.body.appendChild(d);box.focus();return fecha}
 function fmtData(d){if(!d)return '—';var x=new Date(d);return x.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit'})+' '+x.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}
 function fmtDia(d){return d?new Date(d).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'}):'—'}
 function reais(n){return Number(n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}
@@ -274,23 +287,25 @@ function comTempo(p,ms){return Promise.race([p,new Promise(function(_,r){setTime
 try{var r=new URLSearchParams(location.search).get('r');if(r){lsSet('precep_ref',r.slice(0,60));history.replaceState(null,'',location.pathname+location.hash)}}catch(e){}
 
 var sb=null;
-try{sb=window.supabase.createClient(CFG.SB_URL,CFG.SB_ANON,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}})}catch(e){}
+try{sb=window.supabase.createClient(CFG.SB_URL,CFG.SB_ANON,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'precep-auth'}})}catch(e){}
 var S={perfil:null,montado:false,offset:0,pixId:null,poll:null,cfg:null,filtro:'todos'};
 
 /* ---------------- boot ---------------- */
 async function boot(){
   ver('vCarregando');
   var cache=lsGet('precep_cache');
-  if(!sb){ if(cacheValido(cache))return abrirApp(cache,true); msg($('entMsg'),'Não consegui carregar. Verifique a internet e abra de novo.','erro'); return ver('vEntrar'); }
-  var sess=null;
-  try{sess=(await sb.auth.getSession()).data.session}catch(e){}
-  if(!sess){ return ver('vEntrar'); }
+  if(cache&&cache.html){if(await guardarHtml(cache.html)){delete cache.html;lsSet('precep_cache',cache)}}  // formato antigo: migra
+  if(!sb){ if(cacheValido(cache)&&await abrirCache(cache))return; msg($('entMsg'),'Não consegui carregar. Verifique a internet e abra de novo.','erro'); return ver('vEntrar'); }
+  if(S.recovery||/type=recovery/.test(location.hash))return;  // link de nova senha: fica no formulário
+  var sess=null,falhaSess=false;
+  try{sess=(await sb.auth.getSession()).data.session}catch(e){falhaSess=true}
+  if(!sess){ if((falhaSess||!navigator.onLine)&&cacheValido(cache)&&await abrirCache(cache))return; return ver('vEntrar'); }
   var meta=(sess.user&&sess.user.user_metadata)||{};
   var res;
   try{ res=await comTempo(sb.rpc('precep_iniciar',{p_nome:meta.nome||null,p_whats:meta.whatsapp||null,p_cat:meta.categoria||null,p_origem:meta.origem||null}),9000) }
   catch(e){ res={error:e} }
   if(res.error){
-    if(rede(res.error)&&cacheValido(cache)){window.precepSB=sb;window.precepUser={id:sess.user.id,email:sess.user.email,nome:cache.nome||'',admin:!!cache.admin};return abrirApp(cache,true)}
+    if(rede(res.error)&&cacheValido(cache)){window.precepSB=sb;window.precepUser={id:sess.user.id,email:sess.user.email,nome:cache.nome||'',admin:!!cache.admin};if(await abrirCache(cache))return}
     if(rede(res.error)){msg($('entMsg'),'Sem internet. Conecte uma vez para entrar.','erro');return ver('vEntrar')}
     if(/JWT|token|autentic/i.test(res.error.message||'')){await sair();return}
     msg($('entMsg'),'Erro ao abrir sua conta: '+(res.error.message||''),'erro');return ver('vEntrar');
@@ -299,38 +314,39 @@ async function boot(){
   window.precepSB=sb;window.precepUser={id:sess.user.id,email:sess.user.email,nome:p.nome||'',admin:!!p.admin};
   if(p.admin&&location.hash==='#admin')return abrirAdmin();
   if(p.admin||(p.acesso_ate&&Date.parse(p.acesso_ate)>Date.parse(p.agora)))return carregarConteudo(p);
-  ['precep_cache','precep_pac','precep_rx'].forEach(lsDel);
+  lsDel('precep_cache');
   return abrirPagar(p);
 }
 function agora(){return Date.now()+S.offset}
 /* offline: até 7 dias desde a última confirmação do servidor (e relógio que não andou para trás) */
-function cacheValido(c){var n=Date.now();return !!(c&&c.html&&c.visto&&n-c.visto<7*864e5&&n>=c.visto-6e4&&(c.admin||(c.acesso_ate&&Date.parse(c.acesso_ate)>n)))}
+function cacheValido(c){var n=Date.now();return !!(c&&c.versao&&c.visto&&n-c.visto<7*864e5&&n>=c.visto-6e5&&(c.admin||(c.acesso_ate&&Date.parse(c.acesso_ate)>n)))}
 
 async function carregarConteudo(p){
   var cache=lsGet('precep_cache')||{};
   try{
     var v=await comTempo(sb.from('precep_app').select('versao').single(),9000);
     if(v.error)throw v.error;
-    var html=cache.html;
-    if(!html||cache.versao!==v.data.versao){
+    var html=cache.versao===v.data.versao?await lerHtml(cache):null;
+    if(!html){
       var c=await comTempo(sb.from('precep_app').select('versao,html').single(),15000);
       if(c.error)throw c.error;html=c.data.html;
     }
-    cache={versao:v.data.versao,html:html,acesso_ate:p.acesso_ate,admin:!!p.admin,status:p.status,nome:p.nome,email:p.email,visto:Date.now()};
+    cache={versao:v.data.versao,acesso_ate:p.acesso_ate,admin:!!p.admin,status:p.status,nome:p.nome,email:p.email,visto:Date.now()};
+    if(!(await guardarHtml(html)))cache.html=html;  // navegador sem Cache Storage: guarda como antes
     lsSet('precep_cache',cache);
-    abrirApp(cache,false);
+    abrirApp(cache,false,html);
   }catch(e){
-    if(cacheValido(cache))return abrirApp(cache,true);
+    if(cacheValido(cache)&&await abrirCache(cache))return;
     msg($('pgMsg'),'Não consegui carregar o app agora. Tente de novo em instantes.','erro');abrirPagar(p);
   }
 }
 
 /* ---------------- app ---------------- */
-function abrirApp(c,offline){
+function abrirApp(c,offline,html){
   $('vOffline').hidden=!offline;
   if(!S.perfil)S.perfil={status:c.status,acesso_ate:c.acesso_ate,admin:c.admin,nome:c.nome,email:c.email};
   if(!S.montado){
-    var el=$('vApp');el.innerHTML=c.html;
+    var el=$('vApp');el.innerHTML=html||c.html||'';
     Array.prototype.slice.call(el.querySelectorAll('script')).forEach(function(s){var code=s.textContent;s.remove();try{(new Function(code))()}catch(e){console.error(e)}});
     S.montado=true;
     var brand=el.querySelector('.brand');
@@ -346,7 +362,7 @@ function faixaTeste(){
   var ms=Date.parse(p.acesso_ate)-agora();if(!(ms>0))return;
   var h=Math.floor(ms/3600e3),m=Math.floor(ms%3600e3/60e3),dd=Math.floor(h/24);
   var f=document.createElement('div');f.className='faixa';f.id='faixaTeste';
-  f.innerHTML='<span>Teste grátis: faltam <b>'+(dd?dd+' d '+(h%24)+' h':(h?h+' h ':'')+m+' min')+'</b></span><button class="btn sm">Liberar 6 meses</button>';
+  f.innerHTML='<span>Teste grátis: faltam <b>'+(dd?dd+' d '+(h%24)+' h':(h?h+' h ':'')+m+' min')+'</b></span><button class="btn sm">Liberar '+mesesCfg()+' meses</button>';
   f.querySelector('button').onclick=function(){abrirPagar(S.perfil,true)};
   var top=$('vApp').querySelector('.top');if(top)top.appendChild(f);
 }
@@ -365,7 +381,7 @@ async function checarVersao(){
     f.querySelector('button').onclick=async function(){
       this.disabled=true;this.textContent='Atualizando…';
       try{var n=await comTempo(sb.from('precep_app').select('versao,html').single(),15000);
-        if(!n.error&&n.data){c.versao=n.data.versao;c.html=n.data.html;lsSet('precep_cache',c)}}catch(e){}
+        if(!n.error&&n.data){c.versao=n.data.versao;delete c.html;if(!(await guardarHtml(n.data.html)))c.html=n.data.html;lsSet('precep_cache',c)}}catch(e){}
       location.reload();
     };
     var top=$('vApp').querySelector('.top');if(top)top.appendChild(f);
@@ -387,8 +403,8 @@ function abrirConta(){
   var p=S.perfil||{},st={pago:'Acesso pago',cortesia:'Cortesia',teste:'Teste grátis',expirado:'Expirado'}[p.status]||'';
   var d=document.createElement('div');d.className='sheet';
   d.innerHTML='<div role="dialog" aria-label="Minha conta"><h3>'+esc(p.nome||'Minha conta')+'</h3><div class="miudo">'+esc(p.email||'')+'</div>'+
-    (p.admin?'<div class="msg ok">Administrador</div>':'<div class="msg">'+st+' até <b>'+fmtData(p.acesso_ate)+'</b></div>')+
-    (p.admin?'<button class="btn" data-a="admin">Painel do administrador</button>':(p.status!=='pago'?'<button class="btn" data-a="pagar">Liberar 6 meses por Pix</button>':'<button class="btn ghost" data-a="pagar">Renovar antecipado</button>'))+
+    (p.admin?'<div class="msg ok">Administrador</div>':'<div class="msg">'+st+(p.status==='expirado'?' em ':' até ')+'<b>'+fmtData(p.acesso_ate)+'</b></div>')+
+    (p.admin?'<button class="btn" data-a="admin">Painel do administrador</button>':(p.status!=='pago'?'<button class="btn" data-a="pagar">Liberar '+mesesCfg()+' meses por Pix</button>':'<button class="btn ghost" data-a="pagar">Renovar antecipado</button>'))+
     '<div class="miudo" style="margin-top:12px">Aparência</div><div class="segt" role="group" aria-label="Tema">'+[['auto','Automático'],['claro','Claro'],['escuro','Escuro']].map(function(x){return '<button data-tema="'+x[0]+'" aria-pressed="'+(temaAtual()===x[0])+'">'+x[1]+'</button>'}).join('')+'</div>'+
     '<div class="miudo" style="margin-top:12px">Usar no computador</div><div class="link-pc"><input id="linkApp" readonly value="'+esc(linkApp())+'" aria-label="Endereço do Precep"><button class="btn sm" data-a="copiarlink">Copiar</button></div>'+
     '<div class="miudo" style="margin:4px 0 8px">Abra esse endereço no navegador do computador e entre com o mesmo e-mail e senha.</div>'+
@@ -403,22 +419,32 @@ function abrirConta(){
     if(a==='copiarlink'){var li=$('linkApp');li.select();copiar(linkApp(),e.target,li)}
     if(a==='enviarlink'){try{navigator.share({title:'Precep',text:'Precep: entre com o mesmo e-mail e senha.',url:linkApp()}).catch(function(){})}catch(_){}}};
   var li0=d.querySelector('#linkApp');if(li0)li0.onfocus=function(){this.select()};
-  document.body.appendChild(d);
+  abrirSheet(d);
 }
 function linkApp(){return (location.origin+location.pathname).replace(/index\.html$/,'')}
-async function sair(){['precep_cache','precep_pix','precep_pac','precep_pasta','precep_pastas','precep_rx'].forEach(lsDel);try{await sb.auth.signOut()}catch(e){}location.hash='';location.reload()}
+async function sair(){
+  try{Object.keys(localStorage).filter(function(k){return /^precep_/.test(k)&&k!=='precep_tema'&&k!=='precep_ref'}).forEach(lsDel)}catch(e){}
+  try{if(window.caches)await caches.delete('precep-app')}catch(e){}
+  try{if(sb)await sb.auth.signOut({scope:'local'})}catch(e){}  // só este aparelho: não derruba o celular nem o Preceptor
+  location.hash='';location.reload()}
 
 /* ---------------- entrar / cadastrar ---------------- */
 function aba(cad){$('abaCad').setAttribute('aria-pressed',cad);$('abaEnt').setAttribute('aria-pressed',!cad);$('fCad').hidden=!cad;$('fEnt').hidden=cad;$('fNova').hidden=true;msg($('entMsg'),'')}
 $('abaCad').onclick=function(){aba(true)};$('abaEnt').onclick=function(){aba(false)};
+if(location.hash==='#entrar'){aba(false);history.replaceState(null,'',location.pathname)}
+function semSb(){if(sb)return false;msg($('entMsg'),'Não consegui carregar. Verifique a internet e abra de novo.','erro');return true}
 function traduz(e){var m=(e&&e.message)||'';
   if(/already registered|already been registered/i.test(m))return 'Este e-mail já tem conta. Use "Já tenho conta".';
   if(/Invalid login/i.test(m))return 'E-mail ou senha incorretos.';
   if(/Email not confirmed/i.test(m))return 'Confirme seu e-mail pelo link que enviamos e depois entre.';
   if(/Password should/i.test(m))return 'A senha precisa de pelo menos 6 caracteres.';
+  if(/rate limit|only request this after/i.test(m))return 'Muitas tentativas. Aguarde um minuto e tente de novo.';
+  if(/link is invalid|has expired|session missing/i.test(m))return 'Este link expirou. Peça um novo em "Esqueci a senha".';
+  if(/different from the old/i.test(m))return 'A nova senha precisa ser diferente da anterior.';
+  if(/validate email|invalid format/i.test(m))return 'E-mail inválido.';
   if(rede(e))return 'Sem conexão. Tente de novo.';
   return m||'Algo deu errado. Tente de novo.'}
-$('fCad').onsubmit=async function(e){e.preventDefault();var b=$('bCad');msg($('entMsg'),'');
+$('fCad').onsubmit=async function(e){e.preventDefault();if(semSb())return;var b=$('bCad');msg($('entMsg'),'');
   if(!$('cTermos').checked){msg($('entMsg'),'Para criar a conta, aceite os Termos de uso e a Política de privacidade.','erro');return}
   b.disabled=true;
   var whats=$('cWhats').value.replace(/\D/g,'');
@@ -427,19 +453,24 @@ $('fCad').onsubmit=async function(e){e.preventDefault();var b=$('bCad');msg($('e
   var r=await sb.auth.signUp({email:$('cEmail').value.trim(),password:$('cSenha').value,options:{data:meta,emailRedirectTo:location.origin+location.pathname}});
   b.disabled=false;
   if(r.error){msg($('entMsg'),traduz(r.error),'erro');return}
+  var u0=r.data.user;if(u0&&u0.identities&&u0.identities.length===0){msg($('entMsg'),'Este e-mail já tem conta. Use "Já tenho conta" ou "Esqueci a senha".','erro');return}
   if(!r.data.session){msg($('entMsg'),'Conta criada. Abra o link que enviamos para '+$('cEmail').value.trim()+' e volte aqui.','ok');return}
   lsDel('precep_ref');boot();
 };
-$('fEnt').onsubmit=async function(e){e.preventDefault();var b=$('bEnt');b.disabled=true;msg($('entMsg'),'');
+$('fEnt').onsubmit=async function(e){e.preventDefault();if(semSb())return;var b=$('bEnt');b.disabled=true;msg($('entMsg'),'');
   var r=await sb.auth.signInWithPassword({email:$('eEmail').value.trim(),password:$('eSenha').value});
   b.disabled=false;if(r.error){msg($('entMsg'),traduz(r.error),'erro');return}boot();
 };
-$('bEsqueci').onclick=async function(){var em=$('eEmail').value.trim();if(!em){msg($('entMsg'),'Digite seu e-mail acima e toque de novo.','erro');return}
-  var r=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.origin+location.pathname});
-  msg($('entMsg'),r.error?traduz(r.error):'Enviamos um link para '+em+'. Abra no celular.',r.error?'erro':'ok')};
-$('fNova').onsubmit=async function(e){e.preventDefault();var r=await sb.auth.updateUser({password:$('nSenha').value});
-  if(r.error){msg($('entMsg'),traduz(r.error),'erro');return}msg($('entMsg'),'Senha salva.','ok');setTimeout(boot,800)};
-if(sb)sb.auth.onAuthStateChange(function(ev){if(ev==='PASSWORD_RECOVERY'){ver('vEntrar');$('fCad').hidden=true;$('fEnt').hidden=true;$('fNova').hidden=false;$('abaCad').parentNode.hidden=true}});
+$('bEsqueci').onclick=async function(){if(semSb())return;var em=$('eEmail').value.trim();if(!em){msg($('entMsg'),'Digite seu e-mail acima e toque de novo.','erro');return}
+  var b=this;b.disabled=true;var r=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.origin+location.pathname});
+  msg($('entMsg'),r.error?traduz(r.error):'Enviamos um link para '+em+'. Abra no celular.',r.error?'erro':'ok');
+  if(r.error)b.disabled=false;else setTimeout(function(){b.disabled=false},30000)};
+$('fNova').onsubmit=async function(e){e.preventDefault();if(semSb())return;var r=await sb.auth.updateUser({password:$('nSenha').value});
+  if(r.error){msg($('entMsg'),traduz(r.error),'erro');return}msg($('entMsg'),'Senha salva.','ok');S.recovery=false;location.hash='';setTimeout(boot,800)};
+if(sb)sb.auth.onAuthStateChange(function(ev){
+  if(ev==='PASSWORD_RECOVERY'){S.recovery=true;ver('vEntrar');$('fCad').hidden=true;$('fEnt').hidden=true;$('fNova').hidden=false;$('abaCad').parentNode.hidden=true;$('nSenha').focus()}
+  if(ev==='SIGNED_OUT'&&S.montado)location.reload();  // saiu em outra aba ou sessão revogada
+});
 
 /* ---------------- pagar ---------------- */
 async function api(path,opt){
@@ -450,6 +481,7 @@ async function api(path,opt){
 }
 async function abrirPagar(p,podeVoltar){
   ver('vPagar');
+  clearInterval(S.poll);S.pixId=null;$('pgPix').hidden=true;$('pgInicio').hidden=false;$('pgAguarda').textContent='Aguardando o pagamento. Pode ficar nesta tela. O Pix vale por 30 min.';msg($('pgMsg'),'');
   $('bVoltarApp').hidden=!(podeVoltar&&S.montado);
   $('pgTitulo').textContent=p.status==='teste'?'Libere agora e não perca o acesso.':p.teste_negado?'Este WhatsApp já usou o teste grátis.':p.status==='expirado'&&p.pago_ate?'Seu acesso terminou. Renove por mais 6 meses.':p.status==='pago'?'Renove antes e some mais 6 meses.':'Seus 5 dias grátis terminaram.';
   try{if(!S.cfg)S.cfg=await api('/config');$('pgPreco').innerHTML=reais(S.cfg.preco)+'<small>por '+S.cfg.meses+' meses</small>';$('bPix').textContent='Gerar Pix de '+reais(S.cfg.preco)}catch(e){}
@@ -465,17 +497,17 @@ function mostrarPix(j){
   $('pgQr').src=j.qr_base64?'data:image/png;base64,'+j.qr_base64:'';$('pgQr').hidden=!j.qr_base64;
   $('pgCode').value=j.qr_code||'';
   if(j.ticket_url){$('pgTicket').href=j.ticket_url;$('pgTicket').hidden=false}else $('pgTicket').hidden=true;
-  clearInterval(S.poll);S.poll=setInterval(function(){checar(false)},5000);
+  clearInterval(S.poll);S.poll=setInterval(function(){if(!document.hidden)checar(false)},5000);
 }
 $('bCopiarPix').onclick=function(){copiar($('pgCode').value,this)};
-$('bJaPaguei').onclick=function(){checar(true)};
+$('bJaPaguei').onclick=async function(){this.disabled=true;try{await checar(true)}finally{this.disabled=false}};
 async function checar(manual){
   if(!S.pixId)return;
   try{var j=await api('/status?id='+encodeURIComponent(S.pixId));
-    if(j.status==='approved'){clearInterval(S.poll);lsDel('precep_pix');$('pgAguarda').textContent='Pagamento confirmado!';msg($('pgMsg'),'Pagamento confirmado. Acesso liberado por 6 meses.','ok');setTimeout(function(){location.hash='';boot()},1200);return}
+    if(j.status==='approved'){clearInterval(S.poll);lsDel('precep_pix');$('pgAguarda').textContent='Pagamento confirmado!';msg($('pgMsg'),'Pagamento confirmado. Acesso liberado por '+mesesCfg()+' meses.','ok');setTimeout(function(){location.hash='';boot()},1200);return}
     if(j.status==='cancelled'||j.status==='expired'||j.status==='rejected'){clearInterval(S.poll);lsDel('precep_pix');$('pgPix').hidden=true;$('pgInicio').hidden=false;msg($('pgMsg'),'Este Pix expirou. Gere um novo.','erro');return}
     if(manual)msg($('pgMsg'),'Ainda não recebemos. O Pix costuma cair em segundos; se já pagou, aguarde nesta tela.','');
-  }catch(e){if(manual)msg($('pgMsg'),rede(e)?'Sem conexão para conferir.':e.message,'erro')}
+  }catch(e){if(manual||/conta de novo/.test(e.message||''))msg($('pgMsg'),rede(e)?'Sem conexão para conferir.':e.message,'erro')}
 }
 $('bSairPg').onclick=sair;
 $('bVoltarApp').onclick=function(){clearInterval(S.poll);ver('vApp')};
@@ -518,12 +550,12 @@ async function carregarUsuarios(){
   if(r.error){msg($('admMsg'),'Erro na lista: '+r.error.message,'erro');return}
   var u=r.data||[];
   $('tUsu').innerHTML=u.map(function(x){
-    var w=x.whatsapp?'<a href="https://wa.me/55'+esc(x.whatsapp.replace(/^55/,''))+'" target="_blank" rel="noopener">'+esc(x.whatsapp)+'</a>':'';
+    var w=x.whatsapp?'<a href="https://wa.me/55'+esc(x.whatsapp.length>11&&x.whatsapp.indexOf('55')===0?x.whatsapp.slice(2):x.whatsapp)+'" target="_blank" rel="noopener">'+esc(x.whatsapp)+'</a>':'';
     return '<tr><td><b>'+esc(x.nome||'—')+'</b><br><span class="miudo">'+esc(x.email)+'<br>'+w+(x.categoria?' · '+esc(x.categoria):'')+(x.origem?' · via '+esc(x.origem):'')+'</span></td>'+
       '<td><span class="st '+x.status+'">'+x.status+'</span>'+(Number(x.pago_total)?'<br><span class="miudo">'+reais(x.pago_total)+'</span>':'')+'</td>'+
       '<td class="n">'+fmtData(x.acesso_ate)+(x.cortesia_motivo?'<br><span class="miudo">'+esc(x.cortesia_motivo)+'</span>':'')+'</td>'+
       '<td class="n">'+x.acessos+'×<br><span class="miudo">'+fmtDia(x.ultimo_acesso)+'</span></td>'+
-      '<td><div class="acoes" data-u="'+x.user_id+'"><button data-d="1">+24 h</button><button data-d="30">+30 d</button><button data-d="182">+6 m</button>'+(x.cortesia_ate?'<button class="rev" data-d="0">Revogar</button>':'')+'</div></td></tr>'}).join('')||'<tr><td colspan="5" class="miudo">Ninguém neste filtro.</td></tr>';
+      '<td><div class="acoes" data-u="'+x.user_id+'"><button data-d="1">+24 h</button><button data-d="30">+30 d</button><button data-d="182">+'+mesesCfg()+' m</button>'+(x.cortesia_ate?'<button class="rev" data-d="0">Revogar</button>':'')+'</div></td></tr>'}).join('')||'<tr><td colspan="5" class="miudo">Ninguém neste filtro.</td></tr>';
 }
 $('tUsu').onclick=async function(e){var b=e.target.closest('button[data-d]');if(!b)return;var box=b.parentNode,uid=box.dataset.u,d=parseInt(b.dataset.d,10);
   if(b.dataset.conf!=='1'){Array.prototype.forEach.call(document.querySelectorAll('.acoes button[data-conf="1"]'),function(x){x.dataset.conf='';x.textContent=x.dataset.t});b.dataset.t=b.textContent;b.dataset.conf='1';b.textContent=d?'Confirmar '+b.dataset.t:'Confirmar';return}
@@ -533,10 +565,12 @@ $('tUsu').onclick=async function(e){var b=e.target.closest('button[data-d]');if(
 function linkRef(){var base=location.origin+location.pathname,o=$('refIn').value.trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-|-$/g,'');$('refOut').textContent=base+(o?'?r='+o:'');}
 $('refIn').oninput=linkRef;$('bCopiarRef').onclick=function(){copiar($('refOut').textContent,this)};
 
-window.addEventListener('hashchange',function(){if(location.hash==='#admin'&&S.perfil&&S.perfil.admin)abrirAdmin()});
+window.addEventListener('hashchange',function(){if(!S.perfil)return;
+  if(location.hash==='#admin'&&S.perfil.admin)return abrirAdmin();
+  if(!$('vAdmin').hidden){if(S.montado)ver('vApp');else carregarConteudo(S.perfil)}});
 window.addEventListener('online',function(){$('vOffline').hidden=true});
 
-if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.serviceWorker.register('sw.js').catch(function(){})}
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){navigator.serviceWorker.register('sw.js').catch(function(){})}
 
 /* ---------------- termos ---------------- */
 var TERMOS='<h3>Termos de uso</h3>'+
@@ -546,7 +580,7 @@ var TERMOS='<h3>Termos de uso</h3>'+
  '<p><b>Seus dados:</b> nome, e-mail, WhatsApp e categoria, usados para criar a conta, liberar o acesso e falar com você. Para apagar a conta, use o contato abaixo.</p>'+
  '<p><b>Pacientes:</b> registre só leito e iniciais. Você é responsável pelo que salvar.</p>'+
  '<p>Contato: '+(CFG.CONTATO||'—')+'</p>';
-document.addEventListener('click',function(e){if(e.target.id==='verTermos'){var d=document.createElement('div');d.className='sheet';d.innerHTML='<div role="dialog" aria-label="Termos de uso" style="max-height:85vh;overflow:auto">'+TERMOS+'<button class="btn" data-x>Fechar</button></div>';d.onclick=function(ev){if(ev.target===d||ev.target.hasAttribute('data-x'))d.remove()};document.body.appendChild(d)}});
+document.addEventListener('click',function(e){if(e.target.id==='verTermos'){var d=document.createElement('div');d.className='sheet';d.innerHTML='<div role="dialog" aria-label="Termos de uso" style="max-height:85vh;overflow:auto">'+TERMOS+'<button class="btn" data-x>Fechar</button></div>';d.onclick=function(ev){if(ev.target===d||ev.target.hasAttribute('data-x'))d.remove()};abrirSheet(d)}});
 
 /* ---------------- instalar (PWA) ---------------- */
 var promptInstalar=null;
@@ -560,7 +594,7 @@ window.precepInstalar=function(){
   var passos=iOS()?'<ol><li>Toque em <b>Compartilhar</b> (o quadrado com a seta, na barra do Safari).</li><li>Escolha <b>Adicionar à Tela de Início</b>.</li><li>Toque em <b>Adicionar</b>. O Precep abre em tela cheia, como um app.</li></ol><p class="miudo">No iPhone, use o Safari para instalar.</p>'
     :'<ol><li>Toque no menu <b>⋮</b> do navegador.</li><li>Escolha <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.</li><li>Confirme. O ícone do Precep aparece junto com os seus apps.</li></ol>';
   var d=document.createElement('div');d.className='sheet';d.innerHTML='<div role="dialog" aria-label="Instalar o app"><h3>Instalar o Precep</h3>'+passos+'<button class="btn" data-x>Entendi</button></div>';
-  d.onclick=function(e){if(e.target===d||e.target.hasAttribute('data-x'))d.remove()};document.body.appendChild(d);
+  d.onclick=function(e){if(e.target===d||e.target.hasAttribute('data-x'))d.remove()};abrirSheet(d);
 };
 document.addEventListener('click',function(e){if(e.target.closest('[data-instalar]'))window.precepInstalar()});
 if(!window.precepInstalado&&iOS())setTimeout(mostraInstalar,0);
