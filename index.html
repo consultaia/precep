@@ -90,6 +90,11 @@ form{display:flex;flex-direction:column;gap:12px}
 @keyframes p{50%{opacity:.25}}
 @media (prefers-reduced-motion:reduce){.pulso{animation:none}}
 .miudo{font-size:13px;color:var(--muted)}
+.planos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.plano{position:relative;text-align:left;border:2px solid var(--line);background:var(--surface,transparent);color:inherit;border-radius:14px;padding:12px;cursor:pointer;font:inherit}
+.plano[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.plano b{display:block;font-size:15px}.plano .pv{display:block;font-family:var(--f-num);font-weight:700;font-size:30px;line-height:1.1}.plano small{display:block;font-size:12.5px;color:var(--muted)}
+.plano .selo{position:absolute;top:-10px;right:10px;background:var(--accent);color:var(--on-accent);font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px}
 .centro{text-align:center}
 
 /* faixa de teste e botão de conta, dentro do app */
@@ -167,7 +172,7 @@ tr:last-child td{border-bottom:0}
     <div class="f"><label for="cSenha">Senha (mín. 6)</label><input id="cSenha" type="password" required minlength="6" autocomplete="new-password"></div>
     <label class="aceite"><input type="checkbox" id="cTermos" required> <span>Li e aceito os <button type="button" class="lnk" id="verTermos">Termos de uso e a Política de privacidade</button>.</span></label>
     <button class="btn" id="bCad">Começar 5 dias grátis</button>
-    <p class="miudo">Depois dos 5 dias grátis: <b>R$ 44,90 por 6 meses</b>, por Pix. Sem renovação automática.</p>
+    <p class="miudo">Depois dos 5 dias grátis: <b>R$ 14,90 por mês</b> ou <b>R$ 69,90 por 6 meses</b>, por Pix. Sem renovação automática.</p>
     <button type="button" class="btn ghost instalar" data-instalar hidden>📲 Instalar o app no celular</button>
   </form>
   <form id="fEnt" hidden autocomplete="on">
@@ -187,8 +192,9 @@ tr:last-child td{border-bottom:0}
 <div id="vPagar" class="tela" hidden>
   <div class="marca">Precep<span>.</span></div>
   <p class="lema" id="pgTitulo">Seus 5 dias grátis terminaram.</p>
-  <div class="preco" id="pgPreco">R$ —<small>por 6 meses</small></div>
+  <div class="preco" id="pgPreco">R$ —<small></small></div>
   <p class="miudo" id="pgSub">Pagamento único por Pix. Liberação automática em segundos.</p>
+  <div id="pgPlanos" class="planos" role="group" aria-label="Escolha o plano" hidden></div>
   <div id="pgInicio" class="linha" style="margin-top:14px">
     <button class="btn" id="bPix" style="flex:1">Gerar Pix</button>
   </div>
@@ -346,7 +352,7 @@ function faixaTeste(){
   var ms=Date.parse(p.acesso_ate)-agora();if(!(ms>0))return;
   var h=Math.floor(ms/3600e3),m=Math.floor(ms%3600e3/60e3),dd=Math.floor(h/24);
   var f=document.createElement('div');f.className='faixa';f.id='faixaTeste';
-  f.innerHTML='<span>Teste grátis: faltam <b>'+(dd?dd+' d '+(h%24)+' h':(h?h+' h ':'')+m+' min')+'</b></span><button class="btn sm">Liberar 6 meses</button>';
+  f.innerHTML='<span>Teste grátis: faltam <b>'+(dd?dd+' d '+(h%24)+' h':(h?h+' h ':'')+m+' min')+'</b></span><button class="btn sm">Assinar</button>';
   f.querySelector('button').onclick=function(){abrirPagar(S.perfil,true)};
   var top=$('vApp').querySelector('.top');if(top)top.appendChild(f);
 }
@@ -388,7 +394,7 @@ function abrirConta(){
   var d=document.createElement('div');d.className='sheet';
   d.innerHTML='<div role="dialog" aria-label="Minha conta"><h3>'+esc(p.nome||'Minha conta')+'</h3><div class="miudo">'+esc(p.email||'')+'</div>'+
     (p.admin?'<div class="msg ok">Administrador</div>':'<div class="msg">'+st+' até <b>'+fmtData(p.acesso_ate)+'</b></div>')+
-    (p.admin?'<button class="btn" data-a="admin">Painel do administrador</button>':(p.status!=='pago'?'<button class="btn" data-a="pagar">Liberar 6 meses por Pix</button>':'<button class="btn ghost" data-a="pagar">Renovar antecipado</button>'))+
+    (p.admin?'<button class="btn" data-a="admin">Painel do administrador</button>':(p.status!=='pago'?'<button class="btn" data-a="pagar">Assinar por Pix</button>':'<button class="btn ghost" data-a="pagar">Renovar antecipado</button>'))+
     '<div class="miudo" style="margin-top:12px">Aparência</div><div class="segt" role="group" aria-label="Tema">'+[['auto','Automático'],['claro','Claro'],['escuro','Escuro']].map(function(x){return '<button data-tema="'+x[0]+'" aria-pressed="'+(temaAtual()===x[0])+'">'+x[1]+'</button>'}).join('')+'</div>'+
     '<div class="miudo" style="margin-top:12px">Usar no computador</div><div class="link-pc"><input id="linkApp" readonly value="'+esc(linkApp())+'" aria-label="Endereço do Precep"><button class="btn sm" data-a="copiarlink">Copiar</button></div>'+
     '<div class="miudo" style="margin:4px 0 8px">Abra esse endereço no navegador do computador e entre com o mesmo e-mail e senha.</div>'+
@@ -448,20 +454,31 @@ async function api(path,opt){
   var r=await fetch(CFG.WORKER+path,opt);var j={};try{j=await r.json()}catch(e){}
   if(!r.ok)throw new Error(j.erro||('Erro '+r.status));return j;
 }
+function planoSel(){var ps=(S.cfg&&S.cfg.planos)||[];return ps.filter(function(x){return x.id===S.plano})[0]||ps.filter(function(x){return x.id==='semestral'})[0]||ps[0]||null}
+function mesesCfg(){var p=planoSel();return p?p.meses:(S.cfg&&S.cfg.meses)||6}
+function mesesTxt(n){return n===1?'1 mês':n+' meses'}
+function planosDesenha(){var ps=(S.cfg&&S.cfg.planos)||[],box=$('pgPlanos');
+  if(ps.length>1){if(!S.plano)S.plano='semestral';var men=ps.filter(function(x){return x.meses===1})[0];
+    box.innerHTML=ps.map(function(x){var pm=x.preco/x.meses,eco=men&&x.meses>1?Math.floor((1-x.preco/(men.preco*x.meses))*100):0;
+      return '<button type="button" class="plano" data-plano="'+x.id+'" aria-pressed="'+(x.id===S.plano)+'">'+(eco>0?'<span class="selo">economize '+eco+'%</span>':'')+'<b>'+x.nome+'</b><span class="pv">'+reais(x.preco)+'</span><small>'+mesesTxt(x.meses)+(x.meses>1?' · '+reais(pm)+'/mês':'')+'</small></button>'}).join('');
+    box.hidden=false;box.querySelectorAll('[data-plano]').forEach(function(b){b.onclick=function(){if(S.pixId)return;S.plano=b.dataset.plano;planosDesenha()}})}
+  else box.hidden=true;
+  var p=planoSel(),preco=p?p.preco:S.cfg.preco,m=p?p.meses:S.cfg.meses;
+  $('pgPreco').innerHTML=reais(preco)+'<small>por '+mesesTxt(m)+'</small>';$('bPix').textContent='Gerar Pix de '+reais(preco)}
 async function abrirPagar(p,podeVoltar){
   ver('vPagar');
   $('bVoltarApp').hidden=!(podeVoltar&&S.montado);
-  $('pgTitulo').textContent=p.status==='teste'?'Libere agora e não perca o acesso.':p.teste_negado?'Este WhatsApp já usou o teste grátis.':p.status==='expirado'&&p.pago_ate?'Seu acesso terminou. Renove por mais 6 meses.':p.status==='pago'?'Renove antes e some mais 6 meses.':'Seus 5 dias grátis terminaram.';
-  try{if(!S.cfg)S.cfg=await api('/config');$('pgPreco').innerHTML=reais(S.cfg.preco)+'<small>por '+S.cfg.meses+' meses</small>';$('bPix').textContent='Gerar Pix de '+reais(S.cfg.preco)}catch(e){}
+  $('pgTitulo').textContent=p.status==='teste'?'Libere agora e não perca o acesso.':p.teste_negado?'Este WhatsApp já usou o teste grátis.':p.status==='expirado'&&p.pago_ate?'Seu acesso terminou. Renove para continuar.':p.status==='pago'?'Renove antes: o tempo novo se soma ao que falta.':'Seus 5 dias grátis terminaram.';
+  try{if(!S.cfg)S.cfg=await api('/config');planosDesenha()}catch(e){}
   var salvo=lsGet('precep_pix');
   if(salvo&&salvo.id&&Date.now()-salvo.t<25*60e3)mostrarPix(salvo);
 }
 $('bPix').onclick=async function(){var b=this;b.disabled=true;msg($('pgMsg'),'');
-  try{var j=await api('/pix',{method:'POST'});j.t=Date.now();lsSet('precep_pix',j);mostrarPix(j)}
+  try{var pl=planoSel();var j=await api('/pix',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plano:pl?pl.id:'semestral'})});j.plano=pl?pl.id:null;j.t=Date.now();lsSet('precep_pix',j);mostrarPix(j)}
   catch(e){msg($('pgMsg'),rede(e)?'Sem conexão. Tente de novo.':e.message,'erro')}
   b.disabled=false};
 function mostrarPix(j){
-  S.pixId=j.id;$('pgInicio').hidden=true;$('pgPix').hidden=false;
+  S.pixId=j.id;if(j.plano&&j.plano!==S.plano&&S.cfg){S.plano=j.plano;planosDesenha()}$('pgPlanos').hidden=true;$('pgInicio').hidden=true;$('pgPix').hidden=false;
   $('pgQr').src=j.qr_base64?'data:image/png;base64,'+j.qr_base64:'';$('pgQr').hidden=!j.qr_base64;
   $('pgCode').value=j.qr_code||'';
   if(j.ticket_url){$('pgTicket').href=j.ticket_url;$('pgTicket').hidden=false}else $('pgTicket').hidden=true;
@@ -472,8 +489,8 @@ $('bJaPaguei').onclick=function(){checar(true)};
 async function checar(manual){
   if(!S.pixId)return;
   try{var j=await api('/status?id='+encodeURIComponent(S.pixId));
-    if(j.status==='approved'){clearInterval(S.poll);lsDel('precep_pix');$('pgAguarda').textContent='Pagamento confirmado!';msg($('pgMsg'),'Pagamento confirmado. Acesso liberado por 6 meses.','ok');setTimeout(function(){location.hash='';boot()},1200);return}
-    if(j.status==='cancelled'||j.status==='expired'||j.status==='rejected'){clearInterval(S.poll);lsDel('precep_pix');$('pgPix').hidden=true;$('pgInicio').hidden=false;msg($('pgMsg'),'Este Pix expirou. Gere um novo.','erro');return}
+    if(j.status==='approved'){clearInterval(S.poll);lsDel('precep_pix');$('pgAguarda').textContent='Pagamento confirmado!';msg($('pgMsg'),'Pagamento confirmado. Acesso liberado por '+mesesTxt(mesesCfg())+'.','ok');setTimeout(function(){location.hash='';boot()},1200);return}
+    if(j.status==='cancelled'||j.status==='expired'||j.status==='rejected'){clearInterval(S.poll);lsDel('precep_pix');$('pgPix').hidden=true;$('pgInicio').hidden=false;S.pixId=null;if(S.cfg)planosDesenha();msg($('pgMsg'),'Este Pix expirou. Gere um novo.','erro');return}
     if(manual)msg($('pgMsg'),'Ainda não recebemos. O Pix costuma cair em segundos; se já pagou, aguarde nesta tela.','');
   }catch(e){if(manual)msg($('pgMsg'),rede(e)?'Sem conexão para conferir.':e.message,'erro')}
 }
@@ -541,7 +558,7 @@ if('serviceWorker' in navigator&&location.protocol==='https:'){navigator.service
 /* ---------------- termos ---------------- */
 var TERMOS='<h3>Termos de uso</h3>'+
  '<p>O Precep é uma ferramenta de <b>apoio</b> para profissionais e estudantes da saúde. Doses, modelos de receita, textos de evolução e guias são sugestões baseadas em bulas e diretrizes, e <b>não substituem a avaliação, o julgamento e a responsabilidade do médico</b> que atende o paciente. Confira sempre dose, apresentação, alergias, gestação, função renal e interações antes de prescrever. Estudantes devem usar sob supervisão.</p>'+
- '<p>O acesso é pessoal e intransferível. Após os 5 dias grátis, o acesso por 6 meses é liberado mediante pagamento único por Pix, sem renovação automática. Valores pagos não são reembolsados após o uso, salvo o previsto no Código de Defesa do Consumidor.</p>'+
+ '<p>O acesso é pessoal e intransferível. Após os 5 dias grátis, o acesso é liberado por 1 mês (plano mensal) ou por 6 meses (plano semestral), mediante pagamento por Pix, sem renovação automática. Valores pagos não são reembolsados após o uso, salvo o previsto no Código de Defesa do Consumidor.</p>'+
  '<h3>Privacidade</h3>'+
  '<p><b>Seus dados:</b> nome, e-mail, WhatsApp e categoria, usados para criar a conta, liberar o acesso e falar com você. Para apagar a conta, use o contato abaixo.</p>'+
  '<p><b>Pacientes:</b> registre só leito e iniciais. Você é responsável pelo que salvar.</p>'+

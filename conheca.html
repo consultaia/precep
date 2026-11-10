@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Precep — só você no plantão? Não mais.</title>
-<meta name="description" content="Doses de intubação pelo peso, receitas prontas, evolução em toques e passo a passo para o internato. 5 dias grátis.">
+<title>Precep — plantão, ambulatório e ambulância</title>
+<meta name="description" content="Dose pelo peso, receita pronta, evolução gerada e prontuário organizado. Para plantão, ambulatório e ambulância. 5 dias grátis, sem cartão.">
 <meta name="theme-color" content="#0F1619">
-<meta property="og:title" content="3 da manhã. Só você no plantão. E agora?">
-<meta property="og:description" content="Intubação, ventilação, procedimentos, gasometria e scores, calculados para o seu paciente. 5 dias grátis no Precep.">
+<meta property="og:title" content="Precep: o plantão inteiro no seu bolso">
+<meta property="og:description" content="Doses pelo peso, 300+ receitas prontas, evolução gerada em toques e registro de ambulância por voz. 5 dias grátis.">
 <meta property="og:image" content="https://consultaia.github.io/precep/card.png">
 <meta property="og:url" content="https://consultaia.github.io/precep/conheca.html">
 <meta name="twitter:card" content="summary_large_image">
@@ -18,207 +18,440 @@
 <style>
 :root{
   --bg:#0F1619; --surface:#172126; --surface2:#1E2A30; --line:#2A3A40;
-  --fg:#E8EEF0; --muted:#93A4AA; --accent:#6FD3D8; --on-accent:#062326;
-  --c-i:#FFD400; --c-p:#36B37E; --c-e:#3FA9F5; --c-a:#B387E6; --c-g:#FF8A3D;
+  --fg:#E8EEF0; --muted:#93A4AA; --accent:#6FD3D8; --on-accent:#062326; --glow:rgba(111,211,216,.16);
+  --c-i:#FFD400; --c-p:#36B37E; --c-e:#3FA9F5; --c-a:#B387E6; --c-g:#FF8A3D; --c-r:#FF5C6C;
   --f-body:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --f-num:"Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
   color-scheme:dark;
 }
 @media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
   --bg:#F3F6F7; --surface:#FFFFFF; --surface2:#EAF0F2; --line:#D3DDE0;
-  --fg:#0F1619; --muted:#55666C; --accent:#0E7C83; --on-accent:#FFFFFF;
-  --c-i:#B8960A; --c-p:#1F8A5B; --c-e:#1F7FC4; --c-a:#7A4FB8; --c-g:#C9601C; color-scheme:light } }
+  --fg:#0F1619; --muted:#55666C; --accent:#0E7C83; --on-accent:#FFFFFF; --glow:rgba(14,124,131,.10);
+  --c-i:#B8960A; --c-p:#1F8A5B; --c-e:#1F7FC4; --c-a:#7A4FB8; --c-g:#C9601C; --c-r:#D33A4A; color-scheme:light } }
 :root[data-theme="light"]{
   --bg:#F3F6F7; --surface:#FFFFFF; --surface2:#EAF0F2; --line:#D3DDE0;
-  --fg:#0F1619; --muted:#55666C; --accent:#0E7C83; --on-accent:#FFFFFF;
-  --c-i:#B8960A; --c-p:#1F8A5B; --c-e:#1F7FC4; --c-a:#7A4FB8; --c-g:#C9601C; color-scheme:light }
+  --fg:#0F1619; --muted:#55666C; --accent:#0E7C83; --on-accent:#FFFFFF; --glow:rgba(14,124,131,.10);
+  --c-i:#B8960A; --c-p:#1F8A5B; --c-e:#1F7FC4; --c-a:#7A4FB8; --c-g:#C9601C; --c-r:#D33A4A; color-scheme:light }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:17px;line-height:1.5;-webkit-text-size-adjust:100%}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:17px;line-height:1.5;-webkit-text-size-adjust:100%;overflow-x:hidden}
 a{color:var(--accent)}
-.w{max-width:960px;margin:0 auto;padding:0 16px}
-header.top{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
-.marca{font-family:var(--f-num);font-weight:700;font-size:30px;letter-spacing:-.01em}
+.w{max-width:1040px;margin:0 auto;padding:0 16px}
+header.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent}
+header.top .w{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;padding-bottom:12px}
+.marca{font-family:var(--f-num);font-weight:700;font-size:30px;letter-spacing:-.01em;text-decoration:none;color:var(--fg)}
 .marca span{color:var(--accent)}
-.lnk{font-size:15px;color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:6px 14px}
-.hero{display:grid;gap:28px;padding:20px 0 36px;align-items:center}
-@media (min-width:820px){.hero{grid-template-columns:1.1fr .9fr;padding:48px 0 56px}}
-h1{font-family:var(--f-num);font-weight:700;font-size:clamp(40px,8vw,64px);line-height:1;margin:0 0 14px;letter-spacing:-.01em;text-wrap:balance}
-h1 em{font-style:normal;color:var(--accent)}
-.sub{font-size:19px;color:var(--muted);margin:0 0 22px;max-width:34em}
-.cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:var(--on-accent);font-weight:700;font-size:18px;text-decoration:none;border-radius:12px;padding:15px 24px;min-height:52px}
-.cta:focus-visible,.lnk:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.navr{display:flex;gap:8px;align-items:center}
+.lnk{font-size:15px;color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:7px 14px;white-space:nowrap}
+.cta-s{font-size:15px;font-weight:700;background:var(--accent);color:var(--on-accent);text-decoration:none;border-radius:999px;padding:8px 16px;white-space:nowrap}
+@media (max-width:420px){.lnk{display:none}}
+.cta{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:var(--on-accent);font-weight:700;font-size:18px;text-decoration:none;border-radius:14px;padding:16px 26px;min-height:56px;box-shadow:0 8px 24px var(--glow)}
+.cta.ghost{background:transparent;color:var(--fg);border:1px solid var(--line);box-shadow:none}
+.cta:focus-visible,.lnk:focus-visible,.cta-s:focus-visible,button:focus-visible{outline:3px solid var(--fg);outline-offset:2px}
+.ctas{display:flex;flex-wrap:wrap;gap:10px}
 .nota{font-size:14px;color:var(--muted);margin-top:10px}
-/* mockup */
-.fone{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:16px;max-width:360px;width:100%;justify-self:center;box-shadow:0 20px 50px rgba(0,0,0,.25)}
-.fone .pt{display:flex;gap:8px;margin-bottom:12px}
-.fone .pt div{flex:1;background:var(--surface2);border-radius:10px;padding:6px 10px}
-.fone .pt small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.fone .pt b{font-family:var(--f-num);font-size:24px}
-.dose{border-radius:12px;background:var(--surface2);padding:10px 12px 10px 18px;position:relative;margin-top:8px}
-.dose::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;border-radius:12px 0 0 12px;background:var(--k)}
-.dose h3{margin:0;font-size:16px}
-.dose .m{font-size:12px;color:var(--muted)}
-.dose .v{font-family:var(--f-num);font-weight:700;font-size:26px}
-.dose .v span{color:var(--accent);margin-left:8px}
-section{padding:36px 0;border-top:1px solid var(--line)}
-h2{font-family:var(--f-num);font-weight:700;font-size:clamp(28px,5vw,40px);line-height:1.05;margin:0 0 18px;text-wrap:balance}
-.grid{display:grid;gap:12px}
-@media (min-width:640px){.grid.g2{grid-template-columns:1fr 1fr}}
-@media (min-width:900px){.grid.g3{grid-template-columns:1fr 1fr 1fr}}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 16px 16px 22px;position:relative}
-.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;border-radius:14px 0 0 14px;background:var(--k,var(--accent))}
-.card h3{margin:0 0 4px;font-family:var(--f-num);font-size:24px;font-weight:700}
-.card p{margin:0;color:var(--muted);font-size:16px}
-.demo{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+/* hero */
+.hero{display:grid;gap:36px;padding:28px 0 44px;align-items:center}
+@media (min-width:860px){.hero{grid-template-columns:1.05fr .95fr;padding:56px 0 72px}}
+.kicker{display:inline-flex;gap:8px;align-items:center;font-size:14px;font-weight:700;color:var(--accent);background:var(--glow);border-radius:999px;padding:6px 12px;margin-bottom:14px}
+h1{font-family:var(--f-num);font-weight:700;font-size:clamp(44px,8.6vw,74px);line-height:.98;margin:0 0 16px;letter-spacing:-.01em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.sub{font-size:19px;color:var(--muted);margin:0 0 24px;max-width:33em}
+.areas3{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 24px;padding:0;list-style:none}
+.areas3 li{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 13px;font-size:15px;font-weight:700}
+/* phone */
+.fone{background:var(--surface);border:1px solid var(--line);border-radius:30px;padding:14px;max-width:370px;width:100%;justify-self:center;box-shadow:0 30px 70px rgba(0,0,0,.30),0 0 0 8px var(--surface2);position:relative}
+.fone-top{display:flex;align-items:center;justify-content:space-between;margin:2px 4px 12px}
+.fone-top b{font-family:var(--f-num);font-size:22px}.fone-top b span{color:var(--accent)}
+.fone-tabs{display:flex;gap:4px;background:var(--surface2);border-radius:999px;padding:3px}
+.fone-tabs button{border:0;background:none;color:var(--muted);font:inherit;font-size:12px;font-weight:700;padding:5px 9px;border-radius:999px;cursor:pointer}
+.fone-tabs button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.tela{display:none;min-height:420px}.tela.on{display:block;animation:entra .35s ease}
+@keyframes entra{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.tl{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:10px 0 6px}
+.bx{background:var(--surface2);border-radius:14px;padding:10px 12px;margin-top:8px;position:relative}
+.bx.k{padding-left:18px}.bx.k::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;border-radius:14px 0 0 14px;background:var(--k)}
+.bx h4{margin:0;font-size:15px}.bx .m{font-size:12px;color:var(--muted)}
+.bx .v{font-family:var(--f-num);font-weight:700;font-size:25px;line-height:1.1}.bx .v span{color:var(--accent);margin-left:8px}
+.txt{font-size:12.5px;line-height:1.45;color:var(--fg);white-space:pre-line;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--surface2);border-radius:12px;padding:10px 12px;margin-top:8px}
+.chipz{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.chipz span{font-size:12px;border:1px solid var(--line);border-radius:999px;padding:3px 9px;background:var(--surface)}
+.chipz span.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.alertb{border-left:4px solid var(--c-g);background:color-mix(in srgb,var(--c-g) 12%,transparent);border-radius:10px;padding:7px 10px;font-size:12.5px;margin-top:8px}
+.recb{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:8px 8px 8px 12px;margin-top:10px}
+.recb div{flex:1;font-size:12.5px}.recb b{display:block;font-size:13px}.recb i{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--c-r);color:#fff;font-style:normal;font-size:20px;animation:pulsa 1.4s infinite}
+@keyframes pulsa{50%{opacity:.72}}
+.evl{list-style:none;margin:6px 0 0;padding:0 0 0 10px;border-left:2px solid var(--line);font-size:13px}.evl li{padding:3px 0}.evl b{font-family:var(--f-num);font-size:15px;margin-right:6px}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:10px}.dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--accent)}
+/* numbers */
+.nums{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:8px 0 40px}
+@media (min-width:760px){.nums{grid-template-columns:repeat(4,1fr)}}
+.num{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+.num b{display:block;font-family:var(--f-num);font-size:44px;line-height:1;color:var(--accent)}
+.num span{font-size:15px;color:var(--muted)}
+section{padding:52px 0;border-top:1px solid var(--line)}
+.eyebrow{font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+h2{font-family:var(--f-num);font-weight:700;font-size:clamp(32px,5.4vw,48px);line-height:1.02;margin:0 0 14px;text-wrap:balance}
+.lead{font-size:18px;color:var(--muted);margin:0 0 24px;max-width:40em}
+/* area switcher */
+.seg{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:4px;margin-bottom:18px;max-width:560px}
+.seg button{flex:1;border:0;background:none;color:var(--muted);font:inherit;font-weight:700;font-size:16px;padding:11px 6px;border-radius:12px;cursor:pointer}
+.seg button[aria-selected="true"]{background:var(--accent);color:var(--on-accent)}
+.painel{display:none;gap:22px;align-items:start}.painel.on{display:grid;animation:entra .3s ease}
+@media (min-width:860px){.painel.on{grid-template-columns:1fr 1fr}}
+.feats{display:grid;gap:10px}
+.feat{display:flex;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.feat .ic{flex:0 0 40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:var(--surface2)}
+.feat h3{margin:0 0 2px;font-size:17px}.feat p{margin:0;color:var(--muted);font-size:15.5px}
+.quote{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px}
+.quote h4{margin:0 0 6px;font-family:var(--f-num);font-size:22px}
+/* demos */
+.demo{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px}
+.dgrid{display:grid;gap:16px}@media (min-width:860px){.dgrid{grid-template-columns:1fr 1fr}}
 .dpt label{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
 .dpt input{width:140px;background:var(--surface2);border:2px solid var(--accent);border-radius:10px;padding:8px 12px;font-family:var(--f-num);font-size:30px;font-weight:700;color:var(--fg)}
 .dseg{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
-.dseg button{border:1px solid var(--line);background:var(--surface2);color:var(--fg);border-radius:999px;padding:8px 14px;font-weight:700;font-size:15px;font-family:var(--f-body)}
+.dseg button,.fala{border:1px solid var(--line);background:var(--surface2);color:var(--fg);border-radius:999px;padding:8px 14px;font-weight:700;font-size:15px;font-family:var(--f-body);cursor:pointer;text-align:left}
 .dseg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
 .dr{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:baseline;padding:10px 0 10px 14px;border-top:1px solid var(--line);position:relative}
 .dr::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:5px;border-radius:3px;background:var(--k)}
 .dr b{font-size:17px}.dr .v{font-family:var(--f-num);font-weight:700;font-size:24px;text-align:right}.dr .v span{color:var(--accent);margin-left:8px}
 .dr small{grid-column:1/-1;color:var(--muted);font-size:14px}
-.card .pq{color:var(--fg);font-family:var(--f-num);font-weight:700;font-size:24px;line-height:1.15;margin:0 0 8px}
+.falas{display:grid;gap:8px;margin:10px 0}
+.fala{border-radius:14px;font-weight:400;font-size:15px;display:flex;gap:10px;align-items:flex-start}
+.fala::before{content:"🎙️"}.fala[disabled]{opacity:.45;cursor:default}
+.reg{font-size:13.5px;line-height:1.5;white-space:pre-line;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--surface2);border-radius:12px;padding:12px;min-height:220px;margin:0}
+.reg mark{background:var(--glow);color:inherit;border-radius:4px;padding:0 2px;animation:entra .5s ease}
+.falta{font-size:14px;color:var(--muted);margin:8px 0 0}.falta b{color:var(--fg)}
+/* grids */
+.grid{display:grid;gap:12px}
+@media (min-width:640px){.grid.g2{grid-template-columns:1fr 1fr}}
+@media (min-width:900px){.grid.g3{grid-template-columns:1fr 1fr 1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 16px 16px 22px;position:relative}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;border-radius:16px 0 0 16px;background:var(--k,var(--accent))}
+.card h3{margin:0 0 4px;font-family:var(--f-num);font-size:24px;font-weight:700}
+.card p{margin:0;color:var(--muted);font-size:16px}
+.card .pq{color:var(--fg);font-family:var(--f-num);font-weight:700;font-size:23px;line-height:1.15;margin:0 0 8px}
 .quem{display:flex;flex-wrap:wrap;gap:8px}
-.quem span{border:1px solid var(--line);border-radius:999px;padding:8px 14px;background:var(--surface)}
-.preco{display:grid;gap:18px;align-items:center}
-@media (min-width:760px){.preco{grid-template-columns:1fr 1fr}}
-.valor{font-family:var(--f-num);font-weight:700;font-size:64px;line-height:1}
+.quem span{border:1px solid var(--line);border-radius:999px;padding:9px 15px;background:var(--surface);font-weight:700}
+/* price */
+.preco{display:grid;gap:22px;align-items:center;background:linear-gradient(160deg,var(--surface),var(--surface2));border:1px solid var(--line);border-radius:22px;padding:22px}
+@media (min-width:780px){.preco{grid-template-columns:1fr 1fr;padding:32px}}
+.valor{font-family:var(--f-num);font-weight:700;font-size:72px;line-height:1}
 .valor small{font-size:22px;color:var(--muted);font-weight:600;margin-left:6px}
+.planos{display:grid;gap:10px;margin:6px 0 18px}@media (min-width:480px){.planos{grid-template-columns:1fr 1fr}}
+.pl{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px}.pl.on{border:2px solid var(--accent)}
+.pl b{font-size:16px}.pl .valor{font-size:46px;margin-top:2px}.pl .valor small{font-size:16px}
+.selo{position:absolute;top:-11px;right:12px;background:var(--accent);color:var(--on-accent);font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px}
+.pmes{font-size:18px;margin:4px 0 16px}.pmes b{color:var(--accent)}
 ul.ok{list-style:none;padding:0;margin:0}
 ul.ok li{padding:6px 0 6px 28px;position:relative}
 ul.ok li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:700}
 details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:0 14px;margin-top:8px}
-details summary{font-weight:700;padding:13px 0;cursor:pointer}
+details summary{font-weight:700;padding:14px 0;cursor:pointer}
 details p{margin:0 0 14px;color:var(--muted)}
+.final{text-align:center;padding:64px 0}
+.final .ctas{justify-content:center}
 footer{padding:28px 0 40px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
-.final{text-align:center}
+.fixo{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:20;display:none}
+.fixo .cta{width:100%}
+@media (max-width:700px){.fixo.on{display:block}body{padding-bottom:84px}}
 </style>
 </head>
 <body>
-<div class="w">
-  <header class="top">
-    <div class="marca">Precep<span>.</span></div>
-    <a class="lnk" href="./" data-cta>Já tenho conta</a>
-  </header>
+<header class="top"><div class="w">
+  <a class="marca" href="#">Precep<span>.</span></a>
+  <div class="navr"><a class="lnk" href="./#entrar" data-cta>Já tenho conta</a><a class="cta-s" href="./" data-cta>Testar grátis</a></div>
+</div></header>
 
+<main class="w">
   <div class="hero">
     <div>
-      <h1>3 da manhã. Só você no plantão. <em>E agora?</em></h1>
-      <p class="sub">Dose, parâmetro, técnica e conduta em segundos, calculados para o paciente na sua frente. Para quem está no internato, acabou de se formar ou dá plantão sozinho. Adulto e pediatria.</p>
-      <a class="cta" href="./" data-cta>Começar 5 dias grátis</a>
-      <p class="nota">Sem cartão. Depois, R$ 44,90 por 6 meses no Pix, sem renovação automática.</p>
+      <span class="kicker">Para interno, recém-formado e plantonista</span>
+      <h1>O plantão inteiro <em>no seu bolso.</em></h1>
+      <p class="sub">Dose pelo peso, receita pronta, evolução gerada em toques e o prontuário do paciente organizado. Do leito de UTI à consulta na UBS e à ambulância.</p>
+      <ul class="areas3" aria-label="Áreas">
+        <li>🛏️ Plantão</li><li>🩺 Ambulatório</li><li>🚑 Ambulância</li><li>💊 Prescrever</li>
+      </ul>
+      <div class="ctas"><a class="cta" href="./" data-cta>Começar 5 dias grátis</a><a class="cta ghost" href="#demo">Ver funcionando</a></div>
+      <p class="nota">Sem cartão. Depois, a partir de R$ 11,65 por mês no Pix, sem renovação automática.</p>
     </div>
-    <div class="fone" aria-label="Exemplo de cálculo no app">
-      <div class="pt"><div><small>Peso</small><b>90 kg</b></div><div><small>Motivo</small><b>Choque</b></div></div>
-      <div class="dose" style="--k:var(--c-i)"><h3>Cetamina</h3><div class="m">0,5–1 mg/kg · 50 mg/ml</div><div class="v">90 mg<span>1,8 ml</span></div></div>
-      <div class="dose" style="--k:#FF4D4D"><h3>Rocurônio</h3><div class="m">1,6 mg/kg no choque · 10 mg/ml</div><div class="v">144 mg<span>14,4 ml</span></div></div>
-      <div class="dose" style="--k:var(--c-e)"><h3>Fentanil contínuo</h3><div class="m">3 mcg/kg/h · 50 mcg/ml</div><div class="v">270 mcg/h<span>5,4 ml/h</span></div></div>
+
+    <div class="fone" aria-label="Telas do app">
+      <div class="fone-top"><b>Precep<span>.</span></b>
+        <div class="fone-tabs" role="group" aria-label="Escolha a tela">
+          <button data-tela="0" aria-pressed="true">Leito</button><button data-tela="1" aria-pressed="false">Ambulância</button><button data-tela="2" aria-pressed="false">Intubar</button>
+        </div></div>
+
+      <div class="tela on" data-t="0">
+        <div class="tl">Leito 7 · 3º DIH · UTI</div>
+        <div class="alertb"><b>Atenção:</b> lactato subindo (2,1 → 3,4); K 5,8 sem controle desde ontem.</div>
+        <div class="chipz"><span class="on">Meropeném D4</span><span class="on">Vancomicina D2</span><span>CVC D5</span><span>SVD D3</span></div>
+        <div class="txt">EVOLUÇÃO — UTI
+#1 Choque séptico de foco pulmonar
+S: sedado, RASS -2.
+O: PA 102x64 (nora 0,12 mcg/kg/min), FC 98.
+P/F 210 · Lactato 3,4 ↑ · Cr 1,8 ↑
+ATB: meropeném D4/7, vanco D2.
+CD: reavaliar volemia; ajustar vanco pelo nível…</div>
+        <div class="bx" style="margin-top:10px"><h4>✨ Olhar da infectologia</h4><div class="m">Tutor com IA sugere o que conferir: cultura, nível de vanco, desescalonar.</div></div>
+      </div>
+
+      <div class="tela" data-t="1">
+        <div class="tl">Ocorrência · AVC</div>
+        <ul class="evl">
+          <li><b>10:40</b>Chegada à cena</li>
+          <li><b>10:42</b>PA 180x100, Glasgow 13</li>
+          <li><b>10:47</b>Acesso venoso em MSE</li>
+          <li><b>11:05</b>Saída da cena, regulado para hospital de AVC</li>
+        </ul>
+        <div class="txt">REGISTRO PRÉ-HOSPITALAR
+MOTIVO: AVC
+QUEIXA: hemiparesia D e afasia, início há 1 h.
+ANTECEDENTES: HAS, FA, varfarina.
+SINAIS: 10:42 PA 180x100 · Glasgow 13 · glic 112</div>
+        <div class="recb"><div><b>Gravando…</b>“saímos da cena onze e cinco”</div><i aria-hidden="true">⏹</i></div>
+      </div>
+
+      <div class="tela" data-t="2">
+        <div class="tl">Intubar · 90 kg · choque</div>
+        <div class="bx k" style="--k:var(--c-i)"><h4>Cetamina</h4><div class="m">1 mg/kg no choque · 50 mg/ml</div><div class="v">90 mg<span>1,8 ml</span></div></div>
+        <div class="bx k" style="--k:var(--c-r)"><h4>Rocurônio</h4><div class="m">1,6 mg/kg no choque · 10 mg/ml</div><div class="v">144 mg<span>14,4 ml</span></div></div>
+        <div class="bx k" style="--k:var(--c-e)"><h4>Noradrenalina</h4><div class="m">0,1 mcg/kg/min · 4 mg em 250 ml</div><div class="v">9 mcg/min<span>33,8 ml/h</span></div></div>
+        <div class="bx k" style="--k:var(--c-p)"><h4>Ventilação inicial</h4><div class="m">6 ml/kg do peso predito · altura 1,75 m</div><div class="v">424 ml<span>PEEP 8</span></div></div>
+      </div>
+      <div class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
     </div>
   </div>
 
+  <div class="nums" aria-label="O que tem dentro">
+    <div class="num"><b>300+</b><span>receitas prontas por condição</span></div>
+    <div class="num"><b>400+</b><span>medicações com dose e referência</span></div>
+    <div class="num"><b>250+</b><span>condutas com data de revisão</span></div>
+    <div class="num"><b>20</b><span>scores com o que fazer</span></div>
+  </div>
+
+  <section id="areas">
+    <p class="eyebrow">Um app, três cenários</p>
+    <h2>Onde você estiver atendendo, ele se adapta.</h2>
+    <p class="lead">Cada área tem o próprio fluxo, do jeito que o atendimento acontece. Tudo fica salvo na sua conta: começa no celular e termina no computador.</p>
+    <div class="seg" role="tablist" aria-label="Áreas">
+      <button role="tab" aria-selected="true" data-area="plt" id="tb-plt" aria-controls="pn-plt">🛏️ Plantão</button>
+      <button role="tab" aria-selected="false" data-area="amb" id="tb-amb" aria-controls="pn-amb">🩺 Ambulatório</button>
+      <button role="tab" aria-selected="false" data-area="aph" id="tb-aph" aria-controls="pn-aph">🚑 Ambulância</button>
+    </div>
+
+    <div class="painel on" id="pn-plt" role="tabpanel" aria-labelledby="tb-plt">
+      <div class="feats">
+        <div class="feat"><div class="ic">📥</div><div><h3>Cole a evolução de ontem</h3><p>O leito se monta sozinho: problemas, antibióticos, dispositivos, exames e condutas, cada um no seu lugar.</p></div></div>
+        <div class="feat"><div class="ic">🧪</div><div><h3>Laboratório vira tabela</h3><p>Cole o laudo ou a tabela do sistema. Saem a série por data, as setas de piora e o que mudou desde ontem.</p></div></div>
+        <div class="feat"><div class="ic">📝</div><div><h3>Evolução pronta, corrida ou por sistemas</h3><p>Com antibiótico e dia de uso, dispositivos, pontos de atenção e o que ainda falta preencher.</p></div></div>
+        <div class="feat"><div class="ic">👥</div><div><h3>Passagem de plantão e equipe</h3><p>Panorama dos leitos numa tabela, modo passagem e pastas compartilhadas com quem divide o plantão.</p></div></div>
+      </div>
+      <div class="quote"><h4>Sem copiar e colar de cinco abas</h4><p class="lead" style="font-size:16px;margin:0">Linha do tempo automática, gasometria com P/F, culturas com dias em andamento e SOFA. Alta, atestado e relatórios saem do mesmo leito.</p></div>
+    </div>
+
+    <div class="painel" id="pn-amb" role="tabpanel" aria-labelledby="tb-amb">
+      <div class="feats">
+        <div class="feat"><div class="ic">👆</div><div><h3>Anamnese de clicar</h3><p>Antecedentes, história familiar por parente, hábitos com minutos por semana e exame físico por aparelho. Toque e o texto se escreve.</p></div></div>
+        <div class="feat"><div class="ic">💊</div><div><h3>Medicações em uso em dois toques</h3><p>Losartana 50 mg 12/12h, metformina, estatinas e mais 80 remédios. Insulina em UI por horário, com as vezes por dia calculadas.</p></div></div>
+        <div class="feat"><div class="ic">🧭</div><div><h3>Hipóteses sugeridas, que você edita</h3><p>PA, IMC, glicemia, HbA1c, TFG e TSH viram hipóteses e condutas sugeridas, com link para o protocolo.</p></div></div>
+        <div class="feat"><div class="ic">📄</div><div><h3>Papelada pronta</h3><p>Atestado, INSS, fraldas, cama, cadeira de banho, fisioterapia e CEPRED, com os dados da consulta.</p></div></div>
+      </div>
+      <div class="quote"><h4>Consulta de cima para baixo</h4><p class="lead" style="font-size:16px;margin:0">Identificação, anamnese, exame, exames, hipóteses e conduta, na ordem do atendimento. No fim, o texto completo para colar no prontuário.</p></div>
+    </div>
+
+    <div class="painel" id="pn-aph" role="tabpanel" aria-labelledby="tb-aph">
+      <div class="feats">
+        <div class="feat"><div class="ic">🎙️</div><div><h3>Um botão para gravar</h3><p>Fale a cada momento da ocorrência. Cada gravação atualiza o registro, sem digitar com a ambulância em movimento.</p></div></div>
+        <div class="feat"><div class="ic">⏱️</div><div><h3>Linha do tempo automática</h3><p>Procedimentos, medicações, aferições e chegadas entram com a hora. Descrições completam o campo certo.</p></div></div>
+        <div class="feat"><div class="ic">✅</div><div><h3>O que falta, na tela</h3><p>“Falta: Glasgow, glicemia, destino.” A lista diminui conforme você fala.</p></div></div>
+        <div class="feat"><div class="ic">💻</div><div><h3>Pronto ao chegar na base</h3><p>XABCDE, sinais seriados, procedimentos e destino num registro só, já salvo na sua conta.</p></div></div>
+      </div>
+      <div class="quote"><h4>Teste logo abaixo</h4><p class="lead" style="font-size:16px;margin:0">A simulação mostra como as falas viram registro. No app, quem organiza é a IA.</p></div>
+    </div>
+  </section>
+
   <section id="demo">
-    <h2>Teste agora, sem cadastro</h2>
-    <p class="sub" style="font-size:17px;margin-bottom:12px">Ponha o peso e escolha o cenário. Veja o que o app entrega na hora de intubar.</p>
-    <div class="demo">
-      <div class="dpt"><label for="dPeso">Peso (kg)</label><input id="dPeso" inputmode="decimal" value="70" autocomplete="off"></div>
-      <div class="dseg" role="group" aria-label="Cenário"><button data-dc="padrao" aria-pressed="true">Padrão</button><button data-dc="choque" aria-pressed="false">Choque</button><button data-dc="bronco" aria-pressed="false">Broncoespasmo</button></div>
-      <div id="dRes"></div>
-      <p class="nota">Demonstração com o peso total. No app, as doses se ajustam ao peso ideal ou magro no obeso, a 10 condições clínicas e à criança, com volume corrente pelo peso predito.</p>
+    <p class="eyebrow">Experimente, sem cadastro</p>
+    <h2>Veja na prática antes de criar a conta.</h2>
+    <div class="dgrid">
+      <div class="demo">
+        <h3 style="margin:0 0 10px;font-size:20px">⚡ Intubação pelo peso</h3>
+        <div class="dpt"><label for="dPeso">Peso (kg)</label><input id="dPeso" inputmode="decimal" value="70" autocomplete="off"></div>
+        <div class="dseg" role="group" aria-label="Cenário"><button data-dc="padrao" aria-pressed="true">Padrão</button><button data-dc="choque" aria-pressed="false">Choque</button><button data-dc="bronco" aria-pressed="false">Broncoespasmo</button></div>
+        <div id="dRes" aria-live="polite"></div>
+        <p class="nota">Demonstração com o peso total. No app, as doses se ajustam ao peso ideal ou magro no obeso, a 10 condições clínicas e à criança.</p>
+      </div>
+      <div class="demo">
+        <h3 style="margin:0 0 4px;font-size:20px">🚑 Gravação na ambulância</h3>
+        <p class="nota" style="margin:0 0 6px">Toque nas falas, na ordem, e veja o registro se montar (simulação).</p>
+        <div class="falas" id="falas"></div>
+        <pre class="reg" id="reg" aria-live="polite"></pre>
+        <p class="falta" id="falta"></p>
+        <button class="lnk" id="regRe" style="margin-top:10px;background:none;cursor:pointer">↺ Recomeçar</button>
+      </div>
     </div>
-    <div style="margin-top:16px"><a class="cta" href="./" data-cta>Ver tudo isso no plantão: 5 dias grátis</a></div>
   </section>
 
   <section>
-    <h2>Já passou por isso?</h2>
+    <p class="eyebrow">Já passou por isso?</p>
+    <h2>As situações em que o Precep salva o plantão.</h2>
     <div class="grid g2">
-      <div class="card q" style="--k:var(--c-i)"><p class="pq">Vai precisar intubar e bateu a dúvida de qual droga e qual dose usar?</p><p><b>⚡ Intubar:</b> peso e motivo. Sai o indutor, o bloqueador e quantos ml aspirar, ajustados para choque, TCE, broncoespasmo, obeso e criança.</p></div>
-      <div class="card q" style="--k:var(--accent)"><p class="pq">Só vai ter você para definir os parâmetros da ventilação. Tem segurança?</p><p><b>🫁 Ventilação:</b> volume corrente pelo peso predito, ajuste para SDRA, asma/DPOC e TCE, e a PEEP titulada pela driving pressure.</p></div>
-      <div class="card q" style="--k:#FF8A3D"><p class="pq">Uma drenagem de tórax para fazer. Está afiado na técnica?</p><p><b>🩺 Procedimentos:</b> 12 procedimentos com indicação, material, passo a passo e nota pronta. Dose máxima de anestésico local em ml para o peso do paciente.</p></div>
-      <div class="card q" style="--k:#E05A7A"><p class="pq">Gasometria na mão e o raciocínio travou?</p><p><b>🩸 Gasometria:</b> distúrbio primário, compensação, anion gap corrigido, delta-delta e a conduta sugerida.</p></div>
-      <div class="card q" style="--k:var(--c-e)"><p class="pq">Paciente chocado e você precisa da noradrenalina em ml/h agora?</p><p><b>💉 Infusões:</b> noradrenalina, sedação e analgesia em ml/h pelo peso, com a diluição da sua unidade.</p></div>
-      <div class="card q" style="--k:var(--c-p)"><p class="pq">Alta da criança e não lembra a dose da amoxicilina?</p><p><b>💊 Prescrever:</b> dose pelo peso e receita pronta por condição, para copiar no prontuário.</p></div>
-      <div class="card q" style="--k:var(--c-a)"><p class="pq">Fila de evoluções e o plantão não acaba?</p><p><b>📝 Evoluir:</b> toque nos achados e sai o texto corrido, com os exames do paciente já preenchidos.</p></div>
-      <div class="card q" style="--k:#9AA5AA"><p class="pq">Wells, CURB-65, Child-Pugh… de cabeça, às 3 da manhã?</p><p><b>🧮 Scores:</b> 20 scores por especialidade, com o resultado e o que fazer.</p></div>
+      <div class="card" style="--k:var(--c-i)"><p class="pq">Vai intubar e bateu a dúvida da droga e da dose?</p><p>Peso e motivo. Saem indutor, bloqueador, quantos ml aspirar e a ventilação inicial.</p></div>
+      <div class="card" style="--k:var(--c-p)"><p class="pq">Alta da criança e não lembra a dose da amoxicilina?</p><p>Dose pelo peso com trava de idade e de dose máxima, e a receita pronta para copiar.</p></div>
+      <div class="card" style="--k:var(--c-a)"><p class="pq">Dez evoluções e o plantão não acaba?</p><p>Cole a de ontem, atualize o que mudou e a evolução de hoje sai pronta.</p></div>
+      <div class="card" style="--k:var(--c-e)"><p class="pq">Paciente chocado e você precisa da nora em ml/h agora?</p><p>Noradrenalina, sedação e analgesia em ml/h pelo peso, na diluição da sua unidade.</p></div>
+      <div class="card" style="--k:#E05A7A"><p class="pq">Gasometria na mão e o raciocínio travou?</p><p>Distúrbio primário, compensação, anion gap corrigido, delta-delta e a conduta sugerida.</p></div>
+      <div class="card" style="--k:var(--c-g)"><p class="pq">Drenagem de tórax para fazer e a técnica enferrujou?</p><p>12 procedimentos com indicação, material e passo a passo.</p></div>
     </div>
-    <div style="margin-top:18px"><a class="cta" href="./" data-cta>Quero plantão com segurança: 5 dias grátis</a></div>
   </section>
 
   <section>
-    <h2>Tudo o que o plantão pede, em um toque</h2>
-    <p class="sub" style="font-size:17px;margin-bottom:16px">E uma busca que acha qualquer droga, receita ou procedimento pelo nome.</p>
+    <p class="eyebrow">Prescrever com segurança</p>
+    <h2>Receita certa, sem abrir bula às 3 da manhã.</h2>
+    <div class="grid g3">
+      <div class="card" style="--k:var(--c-p)"><h3>💊 Dose pelo peso</h3><p>Adulto e pediatria, com apresentação, diluição, dose máxima diária e travas de idade.</p></div>
+      <div class="card" style="--k:var(--c-r)"><h3>⚠️ Alergia conferida</h3><p>Informe a alergia uma vez: cada item da receita é conferido, inclusive por classe e reação cruzada.</p></div>
+      <div class="card" style="--k:var(--c-e)"><h3>📋 300+ receitas prontas</h3><p>Por condição, com opções de tratamento. Salve a sua versão e use de novo no próximo plantão.</p></div>
+      <div class="card" style="--k:var(--c-a)"><h3>🔎 Busca que entende</h3><p>“Pielonifrite”, “amoxacilina”: acha mesmo com erro de digitação.</p></div>
+      <div class="card" style="--k:var(--c-i)"><h3>📚 Com referência</h3><p>Cada medicação mostra a fonte: bula ANVISA, diretrizes do MS e das sociedades.</p></div>
+      <div class="card" style="--k:var(--c-g)"><h3>🖨️ Controle especial</h3><p>Medicação controlada vem sinalizada: você sabe na hora que precisa de receita especial.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">Inteligência artificial que ajuda</p>
+    <h2>Um segundo olhar quando você está sozinho.</h2>
     <div class="grid g2">
-      <div class="card" style="--k:var(--c-i)"><h3>⚡ Intubar</h3><p>Peso e motivo. Saem indutor, bloqueador, tubo, ventilação inicial e checklist, ajustados para choque, TCE, broncoespasmo e criança.</p></div>
-      <div class="card" style="--k:var(--c-p)"><h3>💊 Prescrever</h3><p>Soluções por classe com dose pelo peso e receitas prontas por condição. Copia direto para o prontuário ou para o Word.</p></div>
-      <div class="card" style="--k:var(--c-e)"><h3>📝 Evoluir</h3><p>PA, reavaliação, alta, UTI por sistemas, passagem de plantão. Toque nos achados e sai um texto corrido pronto, com os exames do paciente já preenchidos.</p></div>
-      <div class="card" style="--k:#E05A7A"><h3>🩸 Gasometria</h3><p>Lance os valores e veja o distúrbio, a compensação, o anion gap corrigido, o delta-delta e a conduta sugerida. Vai direto para a evolução.</p></div>
-      <div class="card" style="--k:var(--accent)"><h3>🫁 Ventilação mecânica</h3><p>Volume corrente pelo peso predito, ajuste inicial para SDRA, asma/DPOC, TCE e criança, driving pressure e complacência.</p></div>
-      <div class="card" style="--k:var(--c-a)"><h3>🛏️ Pacientes</h3><p>Leito, problemas, pendências e exames com tendência. Pasta compartilhada com a equipe por código.</p></div>
+      <div class="card" style="--k:var(--accent)"><h3>✨ Melhore esta evolução</h3><p>A IA reescreve em linguagem técnica de prontuário, sem inventar dado que você não registrou.</p></div>
+      <div class="card" style="--k:var(--c-a)"><h3>🎓 Tutor por especialidade</h3><p>“Olhar da neurologia”, “olhar da endocrinologia”: alertas, o que examinar, o que pedir, diferenciais e o que estudar sobre o caso.</p></div>
+    </div>
+    <p class="nota">A IA sugere e você decide. Ela é ferramenta de apoio e não substitui o seu julgamento clínico.</p>
+  </section>
+
+  <section>
+    <p class="eyebrow">Feito para o plantão de verdade</p>
+    <h2>Confiável onde a internet não chega.</h2>
+    <div class="grid g3">
+      <div class="card" style="--k:var(--c-p)"><h3>📶 Funciona offline</h3><p>Abriu uma vez com internet, o app fica no celular. Doses, receitas e condutas funcionam sem sinal.</p></div>
+      <div class="card" style="--k:var(--c-e)"><h3>📱 Instala como app</h3><p>No Android e no iPhone, direto do navegador, sem loja. E abre no computador com a mesma conta.</p></div>
+      <div class="card" style="--k:var(--c-g)"><h3>🔒 Feito com a LGPD em mente</h3><p>Use só leito e iniciais. Cada paciente fica visível só para você e para quem está na mesma pasta.</p></div>
     </div>
   </section>
 
   <section>
-    <h2>Para quem está começando</h2>
-    <div class="grid g2">
-      <div class="card" style="--k:var(--c-g)"><h3>🎓 Aprender</h3><p>Sequência rápida em 10 passos, qual indutor escolher em cada caso, sedação depois do tubo e como fazer a conta de mg, ml e ml/h sem errar.</p></div>
-      <div class="card" style="--k:var(--c-g)"><h3>💉 Anestésico local</h3><p>Dose máxima de lidocaína, bupivacaína e ropivacaína em mg e em ml para o peso do paciente, e o que fazer na intoxicação.</p></div>
-    </div>
-    <div class="quem" style="margin-top:16px"><span>Internato</span><span>Recém-formado</span><span>Residente</span><span>Plantonista de PS, UPA e UTI</span></div>
+    <p class="eyebrow">Para quem é</p>
+    <h2>Do primeiro plantão ao décimo ano de carreira.</h2>
+    <div class="quem"><span>Internos</span><span>Recém-formados</span><span>Plantonistas de UPA e PS</span><span>UTI e enfermaria</span><span>Médicos de família e UBS</span><span>SAMU e remoção</span><span>Pediatria</span></div>
   </section>
 
-  <section>
+  <section id="preco">
     <div class="preco">
       <div>
-        <h2>Quanto custa</h2>
-        <div class="valor">R$ 44,90<small>por 6 meses</small></div>
-        <p class="nota">Menos de R$ 7,50 por mês. Pix, liberado em segundos.</p>
+        <p class="eyebrow">Preço</p>
+        <div class="planos">
+          <div class="pl"><b>Mensal</b><div class="valor">R$ 14,90<small>por mês</small></div><p class="nota" style="margin:4px 0 0">Para experimentar um mês de plantão.</p></div>
+          <div class="pl on"><span class="selo">economize 21%</span><b>Semestral</b><div class="valor">R$ 69,90<small>por 6 meses</small></div><p class="nota" style="margin:4px 0 0">Sai a <b style="color:var(--accent)">R$ 11,65 por mês</b>, menos que um lanche no plantão.</p></div>
+        </div>
+        <div class="ctas"><a class="cta" href="./" data-cta>Começar 5 dias grátis</a></div>
+        <p class="nota">Pix, liberado em segundos. Sem cartão e sem renovação automática: você escolhe o plano e decide se renova.</p>
       </div>
       <ul class="ok">
-        <li>5 dias grátis com tudo liberado</li>
-        <li>Sem cartão e sem renovação automática</li>
-        <li>Funciona no celular, instala como app e abre sem internet</li>
-        <li>Adulto e pediatria</li>
-        <li>Texto normal ou em maiúsculas, como o seu serviço pede</li>
+        <li>Plantão, Ambulatório e Ambulância</li>
+        <li>Intubar, ventilação, infusões e procedimentos</li>
+        <li>400+ medicações e 300+ receitas prontas</li>
+        <li>250+ condutas e 20 scores</li>
+        <li>IA para melhorar a evolução e tutor por especialidade</li>
+        <li>Celular e computador com a mesma conta</li>
+        <li>Atualizações incluídas durante os 6 meses</li>
       </ul>
     </div>
   </section>
 
   <section>
-    <h2>Perguntas</h2>
-    <details><summary>Substitui o meu julgamento clínico?</summary><p>Não. É ferramenta de apoio, com base em bulas e diretrizes. Confira sempre dose, apresentação e alergias, e siga o protocolo do seu serviço.</p></details>
-    <details><summary>Funciona sem internet?</summary><p>Sim. Depois de abrir uma vez com internet, o app fica salvo no celular.</p></details>
-    <details><summary>Preciso pagar para testar?</summary><p>Não. São 5 dias grátis com tudo liberado. Se gostar, paga R$ 44,90 no Pix e ganha 6 meses.</p></details>
-    <details><summary>E os dados dos pacientes?</summary><p>Na lista de pacientes você usa só leito e iniciais. Cada paciente fica visível só para você e para quem estiver na mesma pasta.</p></details>
+    <h2>Perguntas frequentes</h2>
+    <details><summary>Substitui o meu julgamento clínico?</summary><p>Não. É ferramenta de apoio, com base em bulas e diretrizes. Confira sempre dose, apresentação e alergias, e siga o protocolo da sua instituição.</p></details>
+    <details><summary>Funciona sem internet?</summary><p>Sim. Depois de abrir uma vez com internet, o app fica salvo no celular. A IA e a sincronização precisam de conexão; as gravações da ambulância ficam guardadas até a internet voltar.</p></details>
+    <details><summary>Preciso pagar para testar?</summary><p>Não. São 5 dias grátis com tudo liberado e sem cartão. Se gostar, escolhe o plano: R$ 14,90 por mês ou R$ 69,90 por 6 meses, no Pix.</p></details>
+    <details><summary>Renova sozinho?</summary><p>Não. No fim do mês ou dos 6 meses você escolhe se quer renovar, e o tempo novo se soma ao que ainda falta. Nada é cobrado sem você pedir.</p></details>
+    <details><summary>E os dados dos pacientes?</summary><p>Você usa só leito e iniciais, sem nome, CPF ou prontuário. Cada paciente fica visível só para você e para quem estiver na mesma pasta.</p></details>
+    <details><summary>Uso no computador do hospital?</summary><p>Sim. Entre com a mesma conta no navegador do computador: os pacientes e as ocorrências estão lá.</p></details>
+    <details><summary>Serve para pediatria?</summary><p>Sim. Doses pelo peso com trava de idade, receitas pediátricas e intubação com tubo e volume para a criança.</p></details>
   </section>
 
-  <section class="final">
-    <h2>Teste no próximo plantão</h2>
-    <a class="cta" href="./" data-cta>Começar 5 dias grátis</a>
-  </section>
+  <div class="final">
+    <h2>O próximo plantão pode ser mais tranquilo.</h2>
+    <p class="lead" style="margin:0 auto 22px">Teste 5 dias com tudo liberado. Sem cartão.</p>
+    <div class="ctas"><a class="cta" href="./" data-cta>Começar 5 dias grátis</a></div>
+  </div>
+</main>
 
-  <footer>Precep · ConsultaIA · Ferramenta de apoio. Não substitui a avaliação médica. Contato: janan.almeida@gmail.com</footer>
-</div>
+<footer><div class="w">
+  <p><b>Não substitui a avaliação e a responsabilidade médica.</b> Ferramenta de apoio à decisão. Confira apresentação e diluição da sua unidade antes de aspirar.</p>
+  <p>Precep · <a href="./">Abrir o app</a></p>
+</div></footer>
+
+<div class="fixo" id="fixo"><a class="cta" href="./" data-cta>Começar 5 dias grátis</a></div>
+
 <script>
-// Mini-demo: doses de sequência rápida pelo peso total (o app ajusta por peso ideal/magro e por condição).
 (function(){
+  var reduz=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // telas do celular no topo: troca sozinha até a pessoa tocar
+  var telas=document.querySelectorAll('.tela'),bts=document.querySelectorAll('[data-tela]'),dots=document.querySelectorAll('.dots i'),cur=0,auto=null;
+  function mostra(i){cur=i;telas.forEach(function(t,j){t.classList.toggle('on',j===i)});bts.forEach(function(b,j){b.setAttribute('aria-pressed',j===i)});dots.forEach(function(d,j){d.classList.toggle('on',j===i)})}
+  bts.forEach(function(b){b.onclick=function(){clearInterval(auto);mostra(+b.dataset.tela)}});
+  if(!reduz)auto=setInterval(function(){mostra((cur+1)%telas.length)},4500);
+
+  // áreas
+  var tabs=document.querySelectorAll('[data-area]');
+  tabs.forEach(function(t){t.onclick=function(){tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',on);document.getElementById('pn-'+x.dataset.area).classList.toggle('on',on)})}});
+
+  // demonstração de intubação pelo peso total (o app ajusta por peso ideal/magro e por condição)
   var C='padrao',fmt=function(n,d){return n.toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d})};
   var ml=function(n){return n>=1?fmt(Math.round(n*10)/10,1):fmt(Math.round(n*100)/100,2)};
   var CEN={
-    padrao:[['Fentanil','pré-tratamento, lento, 3 min antes',2,50,'mcg','var(--c-e)'],['Etomidato','indutor',0.3,2,'mg','var(--c-i)'],['Rocurônio','bloqueador',1.2,10,'mg','#FF4D4D']],
-    choque:[['Cetamina','indutor, dose reduzida no choque',1,50,'mg','var(--c-i)'],['Rocurônio','bloqueador, dose maior no choque',1.6,10,'mg','#FF4D4D'],['Adrenalina push-dose','deixe aspirada: 10 mcg/ml, 5–20 mcg por bolus',null,10,'mcg','var(--c-g)']],
-    bronco:[['Cetamina','indutor broncodilatador',1.5,50,'mg','var(--c-i)'],['Rocurônio','bloqueador',1.2,10,'mg','#FF4D4D']]};
+    padrao:[['Fentanil','pré-tratamento, lento, 3 min antes',2,50,'mcg','var(--c-e)'],['Etomidato','indutor',0.3,2,'mg','var(--c-i)'],['Rocurônio','bloqueador',1.2,10,'mg','var(--c-r)']],
+    choque:[['Cetamina','indutor, dose reduzida no choque',1,50,'mg','var(--c-i)'],['Rocurônio','bloqueador, dose maior no choque',1.6,10,'mg','var(--c-r)'],['Adrenalina push-dose','deixe aspirada: 10 mcg/ml, 5–20 mcg por bolus',null,10,'mcg','var(--c-g)']],
+    bronco:[['Cetamina','indutor broncodilatador',1.5,50,'mg','var(--c-i)'],['Rocurônio','bloqueador',1.2,10,'mg','var(--c-r)']]};
   function calc(){var w=parseFloat(String(document.getElementById('dPeso').value).replace(',','.')),el=document.getElementById('dRes');
     if(!(w>=3&&w<=250)){el.innerHTML='<p class="nota">Informe um peso entre 3 e 250 kg.</p>';return}
     el.innerHTML=CEN[C].map(function(d){var mg=d[2]==null?10:d[2]*w;return '<div class="dr" style="--k:'+d[5]+'"><b>'+d[0]+'</b><div class="v">'+fmt(Math.round(mg*10)/10,mg<10?1:0)+' '+d[4]+'<span>'+ml(mg/d[3])+' ml</span></div><small>'+(d[2]!=null?fmt(d[2],1)+' '+d[4]+'/kg · ':'')+d[1]+'</small></div>'}).join('')}
   document.getElementById('dPeso').addEventListener('input',calc);
-  Array.prototype.forEach.call(document.querySelectorAll('[data-dc]'),function(b){b.onclick=function(){C=b.dataset.dc;Array.prototype.forEach.call(document.querySelectorAll('[data-dc]'),function(x){x.setAttribute('aria-pressed',x===b)});calc()}});
+  document.querySelectorAll('[data-dc]').forEach(function(b){b.onclick=function(){C=b.dataset.dc;document.querySelectorAll('[data-dc]').forEach(function(x){x.setAttribute('aria-pressed',x===b)});calc()}});
   calc();
+
+  // simulação da gravação na ambulância (roteiro fixo; no app, quem organiza é a IA)
+  var FALAS=[
+    {h:'10:40',f:'“Chegamos agora. Mulher de 68 anos, fraqueza no lado direito e sem conseguir falar, começou faz uma hora.”',
+     set:{vit:'Feminino, 68 anos',mot:'AVC',qp:'Hemiparesia D e afasia de início súbito há ~1 h.'},ev:'Chegada à cena'},
+    {h:'10:42',f:'“Pressão 180 por 100, frequência 88, saturação 96, Glasgow 13. Glicemia 112.”',
+     set:{sv:'10:42 PA 180x100 · FC 88 · SpO₂ 96% · Glasgow 13 · glic 112'},ev:'Aferidos sinais vitais'},
+    {h:'10:47',f:'“Peguei acesso no braço esquerdo. Hipertensa, tem FA, usa varfarina. Nega alergia.”',
+     set:{ap:'HAS, FA. Varfarina.',alg:'Nega',pr:'Acesso venoso periférico'},ev:'Acesso venoso em MSE'},
+    {h:'11:05',f:'“Regulação liberou o hospital de referência em AVC. Saindo da cena.”',
+     set:{des:'Removida ao hospital de referência em AVC (regulado)'},ev:'Saída da cena'}];
+  var st,n;
+  function rotulo(k){return {vit:'VÍTIMA',mot:'MOTIVO',qp:'QUEIXA',ap:'ANTECEDENTES',alg:'ALERGIAS',sv:'SINAIS VITAIS',pr:'PROCEDIMENTOS',des:'DESTINO'}[k]}
+  function desenha(novo){var ord=['vit','mot','qp','ap','alg','sv','pr','des'],l=['REGISTRO PRÉ-HOSPITALAR'];
+    ord.forEach(function(k){if(st[k]){var v=st[k];l.push(rotulo(k)+': '+(novo&&novo.indexOf(k)>=0?'<mark>'+v+'</mark>':v))}});
+    if(st.ev.length)l.push('','EVOLUÇÃO CRONOLÓGICA:',st.ev.map(function(e,i){var t='- '+e.h+' — '+e.t;return novo&&i===st.ev.length-1?'<mark>'+t+'</mark>':t}).join('\n'));
+    document.getElementById('reg').innerHTML=l.length>1?l.join('\n'):'REGISTRO PRÉ-HOSPITALAR\n\n(toque na primeira fala)';
+    var f=[];if(!st.mot)f.push('motivo');if(!st.qp)f.push('queixa');if(!st.sv)f.push('sinais vitais');if(!st.alg)f.push('alergias');if(!st.des)f.push('destino');
+    document.getElementById('falta').innerHTML=f.length?'Falta: <b>'+f.join(', ')+'</b>':'<b>✓ Nada pendente.</b> Registro pronto para a base.';
+    document.querySelectorAll('.fala').forEach(function(b,i){b.disabled=i!==n})}
+  function inicia(){st={ev:[]};n=0;document.getElementById('falas').innerHTML=FALAS.map(function(x,i){return '<button class="fala" data-fala="'+i+'"><span><b>'+x.h+'</b> '+x.f+'</span></button>'}).join('');
+    document.querySelectorAll('.fala').forEach(function(b){b.onclick=function(){var x=FALAS[+b.dataset.fala];Object.keys(x.set).forEach(function(k){st[k]=x.set[k]});st.ev.push({h:x.h,t:x.ev});n++;desenha(Object.keys(x.set))}});desenha()}
+  document.getElementById('regRe').onclick=inicia;inicia();
+
+  // botão fixo no celular, depois que a pessoa passa do topo
+  var fixo=document.getElementById('fixo'),hero=document.querySelector('.hero');
+  if('IntersectionObserver' in window)new IntersectionObserver(function(e){fixo.classList.toggle('on',!e[0].isIntersecting&&!document.querySelector('#preco').contains(document.activeElement))}).observe(hero);
 })();
-// Leva a origem do link (?r=grupo-x) para o cadastro, para as métricas de origem.
+// leva a origem do link (?r=grupo-x) para o cadastro, para as métricas de origem
 (function(){
   var r=new URLSearchParams(location.search).get('r')||'landing';
-  document.querySelectorAll('[data-cta]').forEach(function(a){a.href='./?r='+encodeURIComponent(r)});
+  document.querySelectorAll('[data-cta]').forEach(function(a){a.href='./?r='+encodeURIComponent(r)+(a.hash||'')});
 })();
 </script>
 </body>
