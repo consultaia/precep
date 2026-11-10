@@ -1,5 +1,5 @@
 // Precep — funciona offline. Troque VERSAO a cada deploy da casca.
-const VERSAO = 'precep-v7';
+const VERSAO = 'precep-v8';
 const ARQS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 const CDN = ['cdn.jsdelivr.net', 'fonts.googleapis.com', 'fonts.gstatic.com'];
 const comTempo = (p, ms) => Promise.race([p, new Promise((_, r) => setTimeout(() => r(new Error('timeout')), ms))]);

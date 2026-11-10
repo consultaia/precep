@@ -139,6 +139,10 @@ h2{font-family:var(--f-num);font-weight:700;font-size:clamp(32px,5.4vw,48px);lin
 @media (min-width:780px){.preco{grid-template-columns:1fr 1fr;padding:32px}}
 .valor{font-family:var(--f-num);font-weight:700;font-size:72px;line-height:1}
 .valor small{font-size:22px;color:var(--muted);font-weight:600;margin-left:6px}
+.planos{display:grid;gap:10px;margin:6px 0 18px}@media (min-width:480px){.planos{grid-template-columns:1fr 1fr}}
+.pl{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px}.pl.on{border:2px solid var(--accent)}
+.pl b{font-size:16px}.pl .valor{font-size:46px;margin-top:2px}.pl .valor small{font-size:16px}
+.selo{position:absolute;top:-11px;right:12px;background:var(--accent);color:var(--on-accent);font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px}
 .pmes{font-size:18px;margin:4px 0 16px}.pmes b{color:var(--accent)}
 ul.ok{list-style:none;padding:0;margin:0}
 ul.ok li{padding:6px 0 6px 28px;position:relative}
@@ -170,7 +174,7 @@ footer{padding:28px 0 40px;border-top:1px solid var(--line);font-size:14px;color
         <li>🛏️ Plantão</li><li>🩺 Ambulatório</li><li>🚑 Ambulância</li><li>💊 Prescrever</li>
       </ul>
       <div class="ctas"><a class="cta" href="./" data-cta>Começar 5 dias grátis</a><a class="cta ghost" href="#demo">Ver funcionando</a></div>
-      <p class="nota">Sem cartão. Depois, R$ 44,90 por 6 meses no Pix, sem renovação automática.</p>
+      <p class="nota">Sem cartão. Depois, a partir de R$ 11,65 por mês no Pix, sem renovação automática.</p>
     </div>
 
     <div class="fone" aria-label="Telas do app">
@@ -346,10 +350,12 @@ SINAIS: 10:42 PA 180x100 · Glasgow 13 · glic 112</div>
     <div class="preco">
       <div>
         <p class="eyebrow">Preço</p>
-        <div class="valor">R$ 44,90<small>por 6 meses</small></div>
-        <p class="pmes">É <b>R$ 7,50 por mês</b>, menos que um lanche no plantão.</p>
+        <div class="planos">
+          <div class="pl"><b>Mensal</b><div class="valor">R$ 14,90<small>por mês</small></div><p class="nota" style="margin:4px 0 0">Para experimentar um mês de plantão.</p></div>
+          <div class="pl on"><span class="selo">economize 21%</span><b>Semestral</b><div class="valor">R$ 69,90<small>por 6 meses</small></div><p class="nota" style="margin:4px 0 0">Sai a <b style="color:var(--accent)">R$ 11,65 por mês</b>, menos que um lanche no plantão.</p></div>
+        </div>
         <div class="ctas"><a class="cta" href="./" data-cta>Começar 5 dias grátis</a></div>
-        <p class="nota">Pix, liberado em segundos. Sem cartão e sem renovação automática: você decide se renova.</p>
+        <p class="nota">Pix, liberado em segundos. Sem cartão e sem renovação automática: você escolhe o plano e decide se renova.</p>
       </div>
       <ul class="ok">
         <li>Plantão, Ambulatório e Ambulância</li>
@@ -367,8 +373,8 @@ SINAIS: 10:42 PA 180x100 · Glasgow 13 · glic 112</div>
     <h2>Perguntas frequentes</h2>
     <details><summary>Substitui o meu julgamento clínico?</summary><p>Não. É ferramenta de apoio, com base em bulas e diretrizes. Confira sempre dose, apresentação e alergias, e siga o protocolo da sua instituição.</p></details>
     <details><summary>Funciona sem internet?</summary><p>Sim. Depois de abrir uma vez com internet, o app fica salvo no celular. A IA e a sincronização precisam de conexão; as gravações da ambulância ficam guardadas até a internet voltar.</p></details>
-    <details><summary>Preciso pagar para testar?</summary><p>Não. São 5 dias grátis com tudo liberado e sem cartão. Se gostar, paga R$ 44,90 no Pix e ganha 6 meses.</p></details>
-    <details><summary>Renova sozinho?</summary><p>Não. No fim dos 6 meses você escolhe se quer renovar. Nada é cobrado sem você pedir.</p></details>
+    <details><summary>Preciso pagar para testar?</summary><p>Não. São 5 dias grátis com tudo liberado e sem cartão. Se gostar, escolhe o plano: R$ 14,90 por mês ou R$ 69,90 por 6 meses, no Pix.</p></details>
+    <details><summary>Renova sozinho?</summary><p>Não. No fim do mês ou dos 6 meses você escolhe se quer renovar, e o tempo novo se soma ao que ainda falta. Nada é cobrado sem você pedir.</p></details>
     <details><summary>E os dados dos pacientes?</summary><p>Você usa só leito e iniciais, sem nome, CPF ou prontuário. Cada paciente fica visível só para você e para quem estiver na mesma pasta.</p></details>
     <details><summary>Uso no computador do hospital?</summary><p>Sim. Entre com a mesma conta no navegador do computador: os pacientes e as ocorrências estão lá.</p></details>
     <details><summary>Serve para pediatria?</summary><p>Sim. Doses pelo peso com trava de idade, receitas pediátricas e intubação com tubo e volume para a criança.</p></details>
