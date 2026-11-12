@@ -98,7 +98,7 @@ h2{font-family:var(--f-num);font-weight:700;font-size:clamp(32px,5.4vw,48px);lin
 .seg button{flex:1;border:0;background:none;color:var(--muted);font:inherit;font-weight:700;font-size:16px;padding:11px 6px;border-radius:12px;cursor:pointer}
 .seg button[aria-selected="true"]{background:var(--accent);color:var(--on-accent)}
 .painel{display:none;gap:22px;align-items:start}.painel.on{display:grid;animation:entra .3s ease}
-@media (min-width:860px){.painel.on{grid-template-columns:1fr 1fr}}
+@media (min-width:860px){.painel.on{grid-template-columns:1fr}.painel .feats{grid-template-columns:1fr 1fr}.painel .quote{order:-1}}
 .feats{display:grid;gap:10px}
 .feat{display:flex;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
 .feat .ic{flex:0 0 40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:var(--surface2)}
@@ -246,7 +246,8 @@ SINAIS: 10:42 PA 180x100 · Glasgow 13 · glic 112</div>
         <div class="feat"><div class="ic">📥</div><div><h3>Cole a evolução de ontem</h3><p>O leito se monta sozinho: problemas, antibióticos, dispositivos, exames e condutas, cada um no seu lugar.</p></div></div>
         <div class="feat"><div class="ic">🧪</div><div><h3>Laboratório vira tabela</h3><p>Cole o laudo ou a tabela do sistema. Saem a série por data, as setas de piora e o que mudou desde ontem.</p></div></div>
         <div class="feat"><div class="ic">📝</div><div><h3>Evolução pronta, corrida ou por sistemas</h3><p>Com antibiótico e dia de uso, dispositivos, pontos de atenção e o que ainda falta preencher.</p></div></div>
-        <div class="feat"><div class="ic">👥</div><div><h3>Passagem de plantão e equipe</h3><p>Panorama dos leitos numa tabela, modo passagem e pastas compartilhadas com quem divide o plantão.</p></div></div>
+        <div class="feat"><div class="ic">👥</div><div><h3>Passagem de plantão e equipe</h3><p>Panorama dos leitos numa tabela, modo passagem e pastas compartilhadas por código com quem divide o plantão.</p></div></div>
+        <div class="feat"><div class="ic">🗂️</div><div><h3>Resumo clínico em um toque</h3><p>Diagnósticos, antibióticos, dispositivos, exames e pendências do paciente numa tela só, pronta para copiar.</p></div></div>
       </div>
       <div class="quote"><h4>Sem copiar e colar de cinco abas</h4><p class="lead" style="font-size:16px;margin:0">Linha do tempo automática, gasometria com P/F, culturas com dias em andamento e SOFA. Alta, atestado e relatórios saem do mesmo leito.</p></div>
     </div>
@@ -256,9 +257,12 @@ SINAIS: 10:42 PA 180x100 · Glasgow 13 · glic 112</div>
         <div class="feat"><div class="ic">👆</div><div><h3>Anamnese de clicar</h3><p>Antecedentes, história familiar por parente, hábitos com minutos por semana e exame físico por aparelho. Toque e o texto se escreve.</p></div></div>
         <div class="feat"><div class="ic">💊</div><div><h3>Medicações em uso em dois toques</h3><p>Losartana 50 mg 12/12h, metformina, estatinas e mais 80 remédios. Insulina em UI por horário, com as vezes por dia calculadas.</p></div></div>
         <div class="feat"><div class="ic">🧭</div><div><h3>Hipóteses sugeridas, que você edita</h3><p>PA, IMC, glicemia, HbA1c, TFG e TSH viram hipóteses e condutas sugeridas, com link para o protocolo.</p></div></div>
-        <div class="feat"><div class="ic">📄</div><div><h3>Papelada pronta</h3><p>Atestado, INSS, fraldas, cama, cadeira de banho, fisioterapia e CEPRED, com os dados da consulta.</p></div></div>
+        <div class="feat"><div class="ic">🖨️</div><div><h3>Receita pronta para imprimir</h3><p>As medicações em uso viram receita com a sua logo ou a da sua instituição. Controle especial sai em duas vias.</p></div></div>
+        <div class="feat"><div class="ic">🧪</div><div><h3>Exames em combos</h3><p>Perfil hepático, função renal, check-up ou os seus combos, num toque. A requisição sai no padrão SESAB, três por folha.</p></div></div>
+        <div class="feat"><div class="ic">📑</div><div><h3>APAC já preenchida</h3><p>Exame que precisa de APAC abre o formulário com os dados da consulta e uma justificativa pronta, que você edita.</p></div></div>
+        <div class="feat"><div class="ic">📄</div><div><h3>Papelada pronta</h3><p>Atestado, comparecimento, eletroneuromiografia, INSS, fraldas, cama, fisioterapia e CEPRED, com os dados da consulta.</p></div></div>
       </div>
-      <div class="quote"><h4>Consulta de cima para baixo</h4><p class="lead" style="font-size:16px;margin:0">Identificação, anamnese, exame, exames, hipóteses e conduta, na ordem do atendimento. No fim, o texto completo para colar no prontuário.</p></div>
+      <div class="quote"><h4>Consulta de cima para baixo</h4><p class="lead" style="font-size:16px;margin:0">Identificação, anamnese, exame, exames, hipóteses, conduta e impressos, na ordem do atendimento. No fim, o texto completo para colar no prontuário e os papéis prontos para entregar.</p></div>
     </div>
 
     <div class="painel" id="pn-aph" role="tabpanel" aria-labelledby="tb-aph">
@@ -352,7 +356,7 @@ SINAIS: 10:42 PA 180x100 · Glasgow 13 · glic 112</div>
         <p class="eyebrow">Preço</p>
         <div class="planos">
           <div class="pl"><b>Mensal</b><div class="valor">R$ 14,90<small>por mês</small></div><p class="nota" style="margin:4px 0 0">Para experimentar um mês de plantão.</p></div>
-          <div class="pl on"><span class="selo">economize 21%</span><b>Semestral</b><div class="valor">R$ 69,90<small>por 6 meses</small></div><p class="nota" style="margin:4px 0 0">Sai a <b style="color:var(--accent)">R$ 11,65 por mês</b>, menos que um lanche no plantão.</p></div>
+          <div class="pl on"><span class="selo">economize 22%</span><b>Semestral</b><div class="valor">R$ 69,90<small>por 6 meses</small></div><p class="nota" style="margin:4px 0 0">Sai a <b style="color:var(--accent)">R$ 11,65 por mês</b>, menos que um lanche no plantão.</p></div>
         </div>
         <div class="ctas"><a class="cta" href="./" data-cta>Começar 5 dias grátis</a></div>
         <p class="nota">Pix, liberado em segundos. Sem cartão e sem renovação automática: você escolhe o plano e decide se renova.</p>
@@ -361,10 +365,11 @@ SINAIS: 10:42 PA 180x100 · Glasgow 13 · glic 112</div>
         <li>Plantão, Ambulatório e Ambulância</li>
         <li>Intubar, ventilação, infusões e procedimentos</li>
         <li>400+ medicações e 300+ receitas prontas</li>
+        <li>Receita, requisição de exames e APAC para imprimir</li>
         <li>250+ condutas e 20 scores</li>
         <li>IA para melhorar a evolução e tutor por especialidade</li>
         <li>Celular e computador com a mesma conta</li>
-        <li>Atualizações incluídas durante os 6 meses</li>
+        <li>Atualizações incluídas durante todo o plano</li>
       </ul>
     </div>
   </section>
@@ -376,6 +381,7 @@ SINAIS: 10:42 PA 180x100 · Glasgow 13 · glic 112</div>
     <details><summary>Preciso pagar para testar?</summary><p>Não. São 5 dias grátis com tudo liberado e sem cartão. Se gostar, escolhe o plano: R$ 14,90 por mês ou R$ 69,90 por 6 meses, no Pix.</p></details>
     <details><summary>Renova sozinho?</summary><p>Não. No fim do mês ou dos 6 meses você escolhe se quer renovar, e o tempo novo se soma ao que ainda falta. Nada é cobrado sem você pedir.</p></details>
     <details><summary>E os dados dos pacientes?</summary><p>Você usa só leito e iniciais, sem nome, CPF ou prontuário. Cada paciente fica visível só para você e para quem estiver na mesma pasta.</p></details>
+    <details><summary>Dá para imprimir receita e pedido de exames?</summary><p>Sim. A receita sai com a logo que você escolher (ou só com o seu nome), e a requisição de exames sai no padrão SESAB, três por folha. O nome do paciente é digitado só na hora de imprimir e não fica salvo.</p></details>
     <details><summary>Uso no computador do hospital?</summary><p>Sim. Entre com a mesma conta no navegador do computador: os pacientes e as ocorrências estão lá.</p></details>
     <details><summary>Serve para pediatria?</summary><p>Sim. Doses pelo peso com trava de idade, receitas pediátricas e intubação com tubo e volume para a criança.</p></details>
   </section>
